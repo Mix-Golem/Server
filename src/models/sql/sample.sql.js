@@ -1,0 +1,2 @@
+export const insertVideoOriginSql="insert into video(version, title,description, link, image,youtube_created_at, created_at, readed_at, updated_at, category_id, user_id) values(?,?,?,?,?,?,?,?,?,?,?);"
+export const insertVideoRevisionSql="insert into video(id, version, title,description, link, image,youtube_created_at, created_at, readed_at, updated_at, category_id, user_id) values(?,?,?,?,?,?,?,?,?,?,?,?);"
