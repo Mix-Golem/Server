@@ -6,3 +6,6 @@ export const sampleRoute = express.Router();
 sampleRoute.get('/sample',async(req,res)=>{
     const result = await findSample(req,res);
 })
+sampleRoute.post('/sample',async(req,res)=>{
+    const result =await insertSampe(req,res);
+})
