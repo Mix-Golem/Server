@@ -2,13 +2,9 @@
 //             Users
 //=================================
 
-export const sendVerificationRequestDTO = (req) => {
+export const checkVerificationRequestDTO = (req) => {
 	return {
-		email: req.email,
-	};
-};
-export const getSampleResponseDTO = (req) => {
-	return {
-		sample: sample,
+		cipherCode: req.cipherCode,
+		code: req.code,
 	};
 };

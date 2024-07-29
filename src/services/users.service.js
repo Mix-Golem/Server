@@ -31,12 +31,12 @@ export const sendVerificationCode = async (req) => {
 		const saltRound = process.env.USER_PASS_SALT;
 		const salt = bcrypt.genSaltSync(Number(saltRound));
 
-		const hashedPassword = bcrypt.hashSync(
+		const hashedCode = bcrypt.hashSync(
 			randomNumber.toString().padStart(6, "0"),
 			salt
 		);
 
-		return hashedPassword;
+		return hashedCode;
 	}
 };
 
@@ -48,4 +48,10 @@ export const sendVerificationCode = async (req) => {
 const findEmailAlreadyExists = async (email) => {
 	const user = await findEmail(email);
 	return user;
+};
+
+export const checkVerificationCode = async (req) => {
+	const code = req.code;
+
+	return bcrypt.compareSync(code.toString(), req.cipherCode);
 };
