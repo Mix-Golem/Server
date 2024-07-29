@@ -1,5 +1,5 @@
 import { status } from "../../../config/response.status";
-import { findEmailSql } from "../sql/users.sql";
+import { findEmailSql, saveUserSql } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
 //=================================
@@ -20,6 +20,39 @@ export const findEmail = async (req) => {
 			console.log(email[0][0].email);
 			return email[0][0].email;
 		}
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+// insert user
+export const saveUser = async (req) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+		const result = await pool.query(saveUserSql, [
+			req.email,
+			req.password,
+			req.name,
+			req.phonenumber,
+			req.gender,
+			req.birth,
+			0,
+			null,
+			null,
+			null,
+			"USER",
+			new Date(),
+			new Date(),
+		]);
+
+		return null;
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);

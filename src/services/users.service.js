@@ -1,4 +1,4 @@
-import { findEmail } from "../models/dao/users.dao.js";
+import { findEmail, saveUser } from "../models/dao/users.dao.js";
 import mailSender from "../../config/email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -11,7 +11,7 @@ dotenv.config();
 
 /**
  * Method to send verification code to email
- * @param {*} req sendVerificationRequestDTO from users.dto.js
+ * @param {*} req email to send verification code
  * @returns encrypted verification code
  */
 export const sendVerificationCode = async (req) => {
@@ -50,8 +50,31 @@ const findEmailAlreadyExists = async (email) => {
 	return user;
 };
 
+/**
+ * Method to check verification code is correct
+ * @param {*} req encrypted verificaiton code & plaintext code
+ * @returns verification code correct(true - code correct / false - code incorrect)
+ */
 export const checkVerificationCode = async (req) => {
 	const code = req.code;
 
 	return bcrypt.compareSync(code.toString(), req.cipherCode);
+};
+
+export const join = async (req) => {
+	if (req.password === req.passwordCheck) {
+		// if password correct
+		// encrypt password
+		const saltRound = process.env.USER_PASS_SALT;
+		const salt = bcrypt.genSaltSync(Number(saltRound));
+
+		req.password = bcrypt.hashSync(req.password, salt);
+
+		saveUser(req);
+
+		return true;
+	} else {
+		// if password incorrect
+		return false;
+	}
 };

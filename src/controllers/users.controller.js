@@ -2,10 +2,14 @@ import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import jwt from "jsonwebtoken";
-import { checkVerificationRequestDTO } from "../dtos/users.dto.js";
+import {
+	checkVerificationRequestDTO,
+	signupRequestDTO,
+} from "../dtos/users.dto.js";
 import {
 	sendVerificationCode,
 	checkVerificationCode,
+	join,
 } from "../services/users.service.js";
 
 //=================================
@@ -39,6 +43,21 @@ export const checkVerification = async (req, res) => {
 		} else {
 			// if code incorrect
 			res.send(response(status.CODE_NOT_CORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+export const signup = async (req, res) => {
+	try {
+		if (await join(signupRequestDTO(req.body))) {
+			// if password correct
+			res.send(response(status.SUCCESS, null));
+		} else {
+			// if password incorrect
+			res.send(response(status.INTERNAL_SERVER_ERROR, null));
 		}
 	} catch (err) {
 		console.log(err);
