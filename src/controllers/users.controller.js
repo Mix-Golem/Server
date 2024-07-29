@@ -57,7 +57,7 @@ export const signup = async (req, res) => {
 			res.send(response(status.SUCCESS, null));
 		} else {
 			// if password incorrect
-			res.send(response(status.INTERNAL_SERVER_ERROR, null));
+			res.send(response(status.PASSWORD_INCORRECT, null));
 		}
 	} catch (err) {
 		console.log(err);

@@ -73,6 +73,12 @@ export const status = {
 		code: "MEMBER4004",
 		message: "코드가 일치하지 않습니다.",
 	},
+	PASSWORD_INCORRECT: {
+		status: StatusCodes.BAD_REQUEST,
+		isSuccess: false,
+		code: "MEMBER4005",
+		message: "비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.",
+	},
 
 	// db error
 	PARAMETER_IS_WRONG: {
