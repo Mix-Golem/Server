@@ -1,21 +1,24 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import jwt from "jsonwebtoken";
+
 import {
 	checkVerificationRequestDTO,
+	loginRequestDTO,
 	signupRequestDTO,
 } from "../dtos/users.dto.js";
 import {
 	sendVerificationCode,
 	checkVerificationCode,
 	join,
+	loginService,
 } from "../services/users.service.js";
 
 //=================================
 //             Users
 //=================================
 
+// /users/signup/email/send-verification-code
 export const sendEmail = async (req, res) => {
 	try {
 		let encryptedCode = await sendVerificationCode(req.param("email"));
@@ -35,6 +38,7 @@ export const sendEmail = async (req, res) => {
 	}
 };
 
+// /users/signup/email/check-verification-code
 export const checkVerification = async (req, res) => {
 	try {
 		if (await checkVerificationCode(checkVerificationRequestDTO(req.body))) {
@@ -50,6 +54,7 @@ export const checkVerification = async (req, res) => {
 	}
 };
 
+// /users/signup
 export const signup = async (req, res) => {
 	try {
 		if (await join(signupRequestDTO(req.body))) {
@@ -58,6 +63,26 @@ export const signup = async (req, res) => {
 		} else {
 			// if password incorrect
 			res.send(response(status.PASSWORD_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/login
+export const login = async (req, res) => {
+	try {
+		const result = await loginService(loginRequestDTO(req.body));
+		if (result === 1) {
+			// if login fail by email doesn't exists
+			res.send(response(status.LOGIN_EMAIL_NOT_EXIST, null));
+		} else if (result === 2) {
+			// if login fail by password incorrect
+			res.send(response(status.LOGIN_PASSWORD_WRONG, null));
+		} else {
+			// if login success
+			res.send(response(status.SUCCESS, result));
 		}
 	} catch (err) {
 		console.log(err);

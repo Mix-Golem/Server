@@ -20,3 +20,10 @@ export const signupRequestDTO = (req) => {
 		birth: req.birth,
 	};
 };
+
+export const loginRequestDTO = (req) => {
+	return {
+		email: req.email,
+		password: req.password,
+	};
+};

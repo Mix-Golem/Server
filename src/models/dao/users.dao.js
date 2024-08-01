@@ -1,5 +1,5 @@
 import { status } from "../../../config/response.status";
-import { findEmailSql, saveUserSql } from "../sql/users.sql";
+import { findEmailSql, saveUserSql, findUserSql } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
 //=================================
@@ -53,6 +53,27 @@ export const saveUser = async (req) => {
 		]);
 
 		return null;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+// bring encrypted password
+export const findUser = async (req) => {
+	let conn;
+	try {
+		console.log("---------");
+		console.log(req);
+		conn = await pool.getConnection();
+
+		const user = await pool.query(findUserSql, [req]);
+
+		return user[0][0];
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);

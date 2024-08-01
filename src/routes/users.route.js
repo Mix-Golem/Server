@@ -3,6 +3,7 @@ import {
 	sendEmail,
 	checkVerification,
 	signup,
+	login,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -12,13 +13,17 @@ export const usersRoute = express.Router();
 //=================================
 
 usersRoute.get("/signup/email/send-verification-code", async (req, res) => {
-	const result = await sendEmail(req, res);
+	await sendEmail(req, res);
 });
 
 usersRoute.post("/signup/email/check-verification-code", async (req, res) => {
-	const result = await checkVerification(req, res);
+	await checkVerification(req, res);
 });
 
 usersRoute.post("/signup", async (req, res) => {
-	const result = await signup(req, res);
+	await signup(req, res);
+});
+
+usersRoute.post("/login", async (req, res) => {
+	await login(req, res);
 });

@@ -1,7 +1,9 @@
-import { findEmail, saveUser } from "../models/dao/users.dao.js";
+import { findEmail, saveUser, findUser } from "../models/dao/users.dao.js";
 import mailSender from "../../config/email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
+import { encrypt } from "../../config/encrypt.js";
+import { createJwt } from "../../config/jwt.js";
 
 dotenv.config();
 
@@ -28,13 +30,7 @@ export const sendVerificationCode = async (req) => {
 		mailSender.sendGmail(req, randomNumber.toString().padStart(6, "0"));
 
 		// 인증코드 암호화
-		const saltRound = process.env.USER_PASS_SALT;
-		const salt = bcrypt.genSaltSync(Number(saltRound));
-
-		const hashedCode = bcrypt.hashSync(
-			randomNumber.toString().padStart(6, "0"),
-			salt
-		);
+		const hashedCode = encrypt(randomNumber.toString().padStart(6, "0"));
 
 		return hashedCode;
 	}
@@ -61,14 +57,16 @@ export const checkVerificationCode = async (req) => {
 	return bcrypt.compareSync(code.toString(), req.cipherCode);
 };
 
+/**
+ * Method to join new user
+ * @param {*} req signupRequestDTO
+ * @returns password & passwordCheck correct(true - correct / false - incorrect)
+ */
 export const join = async (req) => {
 	if (req.password === req.passwordCheck) {
 		// if password correct
 		// encrypt password
-		const saltRound = process.env.USER_PASS_SALT;
-		const salt = bcrypt.genSaltSync(Number(saltRound));
-
-		req.password = bcrypt.hashSync(req.password, salt);
+		req.password = encrypt(req.password);
 
 		saveUser(req);
 
@@ -76,5 +74,30 @@ export const join = async (req) => {
 	} else {
 		// if password incorrect
 		return false;
+	}
+};
+
+/**
+ * Method to login user
+ * @param {*} req loginRequestDTO
+ * @returns bearer token / 1 - password incorrect / 2 - email doesn't exists
+ */
+export const loginService = async (req) => {
+	if (await findEmailAlreadyExists(req.email)) {
+		// if email exists
+		const user = await findUser(req.email);
+
+		if (bcrypt.compareSync(req.password, user.password)) {
+			// if password correct - success
+			return createJwt(user.id);
+		} else {
+			// if password doesn't correct - fail
+			console.log("password incorrect");
+			return 2;
+		}
+	} else {
+		// if email doesn't exists - fail
+		console.log("email doesn't exists");
+		return 1;
 	}
 };

@@ -104,11 +104,11 @@ export const status = {
 		code: "SIGNIN4001",
 		message: "ID 혹은 PW 값이 존재하지 않습니다.",
 	},
-	LOGIN_ID_NOT_EXIST: {
+	LOGIN_EMAIL_NOT_EXIST: {
 		status: StatusCodes.NOT_FOUND,
 		isSuccess: false,
 		code: "SIGNIN4002",
-		message: "아이디를 찾을 수 없습니다.",
+		message: "이메일을 찾을 수 없습니다.",
 	},
 	LOGIN_PASSWORD_WRONG: {
 		status: StatusCodes.BAD_REQUEST,
