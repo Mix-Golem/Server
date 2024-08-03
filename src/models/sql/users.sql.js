@@ -17,3 +17,7 @@ export const saveUserSql =
  * SQL that find id & password by email
  */
 export const findUserSql = "SELECT * FROM USER_MEMBER_TB WHERE email = ?;";
+
+/** SQL that save token to blacklist */
+export const expireToken =
+	"INSERT INTO USER_TOKEN_EXPIRED_TB(token) VALUES(?);";

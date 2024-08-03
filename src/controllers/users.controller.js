@@ -2,6 +2,7 @@ import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 
+import { checkFormat } from "../middleware/jwt.js";
 import {
 	checkVerificationRequestDTO,
 	loginRequestDTO,
@@ -12,6 +13,7 @@ import {
 	checkVerificationCode,
 	join,
 	loginService,
+	logoutService,
 } from "../services/users.service.js";
 
 //=================================
@@ -83,6 +85,25 @@ export const login = async (req, res) => {
 		} else {
 			// if login success
 			res.send(response(status.SUCCESS, result));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/logout
+export const logout = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+
+		if (token !== null) {
+			// if token format correct
+			await logoutService(token);
+			res.send(response(status.SUCCESS, null));
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
 		}
 	} catch (err) {
 		console.log(err);

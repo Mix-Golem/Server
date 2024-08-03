@@ -1,9 +1,15 @@
-import { findEmail, saveUser, findUser } from "../models/dao/users.dao.js";
-import mailSender from "../../config/email.js";
+import {
+	findEmail,
+	saveUser,
+	findUser,
+	saveTokenBlacklist,
+} from "../models/dao/users.dao.js";
+import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
-import { encrypt } from "../../config/encrypt.js";
-import { createJwt } from "../../config/jwt.js";
+import { encrypt } from "../middleware/encrypt.js";
+import { createJwt } from "../middleware/jwt.js";
+import { consumers } from "nodemailer/lib/xoauth2/index.js";
 
 dotenv.config();
 
@@ -89,7 +95,8 @@ export const loginService = async (req) => {
 
 		if (bcrypt.compareSync(req.password, user.password)) {
 			// if password correct - success
-			return createJwt(user.id);
+			user.password = null;
+			return createJwt(user);
 		} else {
 			// if password doesn't correct - fail
 			console.log("password incorrect");
@@ -100,4 +107,10 @@ export const loginService = async (req) => {
 		console.log("email doesn't exists");
 		return 1;
 	}
+};
+
+export const logoutService = async (req) => {
+	console.log(req);
+	await saveTokenBlacklist(req);
+	return null;
 };

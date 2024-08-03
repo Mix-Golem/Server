@@ -79,6 +79,12 @@ export const status = {
 		code: "MEMBER4005",
 		message: "비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.",
 	},
+	TOKEN_FORMAT_INCORRECT: {
+		status: StatusCodes.BAD_REQUEST,
+		isSuccess: false,
+		code: "MEMBER4006",
+		message: "토큰의 형식이 올바르지 않습니다. 다시 확인해주세요.",
+	},
 
 	// db error
 	PARAMETER_IS_WRONG: {
