@@ -9,7 +9,8 @@ import session from 'express-session';
 import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
-import {sampleRoute} from './src/routes/sample.route.js';
+import { sampleRoute } from './src/routes/sample.route.js';
+import { socialRoute } from './src/routes/social.route.js';
 
 
 
@@ -32,7 +33,8 @@ app.use(express.urlencoded({extended: false})); // 단순 객체 문자열 형�
 
 
 //route 추가하는 칸
-app.use('/sample',sampleRoute);
+app.use('/sample', sampleRoute);
+app.use('/social', socialRoute);
 
 
 app.get('/', (req, res) => {
