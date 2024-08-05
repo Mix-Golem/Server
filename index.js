@@ -10,6 +10,7 @@ import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
 import {sampleRoute} from './src/routes/sample.route.js';
+import {playlistRoute} from "./src/routes/playlist.route";
 
 
 
