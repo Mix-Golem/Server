@@ -17,7 +17,7 @@ export const insertPlaylistService = async (requestData) => {
 
 export const deletePlaylistService = async (playlistId) =>{
     try{
-        await deletePlayListDAO(playlistID);
+        await deletePlayListDAO(playlistId);
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error delete playlist');
