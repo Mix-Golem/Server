@@ -33,6 +33,7 @@ app.use(express.urlencoded({extended: false})); // 단순 객체 문자열 형�
 
 //route 추가하는 칸
 app.use('/sample',sampleRoute);
+app.use('/music/playlist', playlistRoute);
 
 
 app.get('/', (req, res) => {
