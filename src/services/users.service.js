@@ -8,8 +8,7 @@ import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { encrypt } from "../middleware/encrypt.js";
-import { createJwt } from "../middleware/jwt.js";
-import { consumers } from "nodemailer/lib/xoauth2/index.js";
+import { createJwt, verify } from "../middleware/jwt.js";
 
 dotenv.config();
 
@@ -95,7 +94,7 @@ export const loginService = async (req) => {
 
 		if (bcrypt.compareSync(req.password, user.password)) {
 			// if password correct - success
-			user.password = null;
+			user.password = "hidden";
 			return createJwt(user);
 		} else {
 			// if password doesn't correct - fail
@@ -109,8 +108,18 @@ export const loginService = async (req) => {
 	}
 };
 
+/**
+ * Method to add token on blacklist
+ * @param {*} req token that add to blacklist
+ * @returns null
+ */
 export const logoutService = async (req) => {
 	console.log(req);
 	await saveTokenBlacklist(req);
 	return null;
+};
+
+export const getUserInfoByToken = async (req) => {
+	let info = verify(req).req;
+	return info;
 };

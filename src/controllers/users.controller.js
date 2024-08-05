@@ -14,6 +14,7 @@ import {
 	join,
 	loginService,
 	logoutService,
+	getUserInfoByToken,
 } from "../services/users.service.js";
 
 //=================================
@@ -101,6 +102,24 @@ export const logout = async (req, res) => {
 			// if token format correct
 			await logoutService(token);
 			res.send(response(status.SUCCESS, null));
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/info
+export const getUserinfo = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+
+		if (token !== null) {
+			// if token format correct
+			res.send(response(status.SUCCESS, await getUserInfoByToken(token)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

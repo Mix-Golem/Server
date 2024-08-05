@@ -5,6 +5,7 @@ import {
 	signup,
 	login,
 	logout,
+	getUserinfo,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -31,4 +32,8 @@ usersRoute.post("/login", async (req, res) => {
 
 usersRoute.post("/logout", async (req, res) => {
 	await logout(req, res);
+});
+
+usersRoute.get("/info", async (req, res) => {
+	await getUserinfo(req, res);
 });

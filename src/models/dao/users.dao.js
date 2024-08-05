@@ -89,6 +89,7 @@ export const findUser = async (req) => {
 	}
 };
 
+// insert token on blacklist
 export const saveTokenBlacklist = async (req) => {
 	let conn;
 	try {
