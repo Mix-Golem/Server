@@ -10,5 +10,12 @@ export const MusicInsertRequestDTO=(userId,data,time)=>{
             lyrics: data.lyrics,
             createdAt: time
     }
-
+}
+export const MusicChangeinfoRequestDTO=(userId,data)=>{
+    return{
+            id: userId,
+            title: data.title,
+            public: data.public,
+            genre: data.genre,
+    }
 }
