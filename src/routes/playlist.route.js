@@ -1,5 +1,5 @@
 import express from "express";
-import { insertPlaylistController, deletePlaylistController, playlistInfoController, addSongsToPlaylistController } from "../controllers/playlist.controller.js";
+import { insertPlaylistController, deletePlaylistController, showUserPlaylistsController,playlistInfoController, addSongsToPlaylistController } from "../controllers/playlist.controller.js";
 export const playlistRoute = express.Router();
 
 // 플레이리스트 생성 라우트
@@ -20,4 +20,9 @@ playlistRoute.get('/:id', async (req, res)=> {
 // 플레이리스트 곡 추가 route
 playlistRoute.post('/add-songs', async (req, res) => {
     await addSongsToPlaylistController(req, res);
-})
+});
+
+playlistRoute.get('/user/:userId',async (req, res) =>{
+    await showUserPlaylistsController(req, res);
+});
+

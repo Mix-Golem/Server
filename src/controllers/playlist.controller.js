@@ -2,10 +2,10 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService } from "../services/playlist.service.js";
+import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService, showUserPlaylistsService } from "../services/playlist.service.js";
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
-// controller 함수
+// 플레이리스트 생성 Controller
 export const insertPlaylistController = async (req, res, next) => {
     try {
         const time = new Date()
@@ -27,6 +27,20 @@ export const insertPlaylistController = async (req, res, next) => {
     }
 };
 
+// 사용자의 모든 플레이리스트 조회 컨트롤러
+export const showUserPlaylistsController = async (req, res, next) => {
+    try {
+        const userId = req.params.userId; // 요청에서 userId를 가져옵니다.
+
+        const playlists = await showUserPlaylistsService(userId);
+        res.send(response(status.SUCCESS, playlists));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+};
+
+// 플레이리스트 삭제 컨트롤러
 export const deletePlaylistController = async (req, res, next) => {
     try {
         const playlistId = req.params.id;

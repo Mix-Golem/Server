@@ -1,7 +1,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql} from "../sql/playlist.sql.js";
+import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, showUserPlaylistsSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -28,6 +28,18 @@ export const deletePlayListDAO = async (playlistID) =>{
         await pool.query(deletePlaylistSql, [playlistID]);
         conn.release;
     }catch (error){
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
+// 유저의 플레이리스트 전체 조회 DAO
+export const showUserPlaylistsDAO = async (userId) => {
+    try {
+        const conn = await pool.getConnection();
+        const [rows] = await pool.query(showUserPlaylistsSql, [userId]);
+        conn.release();
+        return rows;
+    } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }

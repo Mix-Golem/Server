@@ -5,6 +5,16 @@ export const insertPlaylistSql = "INSERT INTO SONG_PLAYLIST_TB (USER_ID, TITLE, 
 // 재생목록 삭제 쿼리문
 export const deletePlaylistSql = "DELETE FROM SONG_PLAYLIST_TB WHERE ID = ?;";
 
+// 자신의 재생목록 모두 불러오기
+export const showUserPlaylistsSql = `
+    SELECT 
+        sp.id AS playlist_id, 
+        sp.title AS playlist_title, 
+        sp.created_at
+    FROM SONG_PLAYLIST_TB sp
+    WHERE sp.user_id = ?;
+`;
+
 // 재생목록 조회 (id, song_id, playlist_id, order)
 // export const playlistInfoSql = `
 //     SELECT sp.id AS playlist_id, sp.title AS playlist_title, si.id AS song_id, si.title AS song_title, spi.order AS song_order

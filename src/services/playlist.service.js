@@ -1,7 +1,7 @@
 // service에서 실제 구현해야 하는 로직 구현
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO} from "../models/dao/playlist.dao.js";
+import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO, showUserPlaylistsDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -15,6 +15,7 @@ export const insertPlaylistService = async (requestData) => {
     }
 };
 
+// 플레이리스트 삭제 함수
 export const deletePlaylistService = async (playlistId) =>{
     try{
         await deletePlayListDAO(playlistId);
@@ -24,7 +25,18 @@ export const deletePlaylistService = async (playlistId) =>{
     }
 };
 
-// 플레이리스트 조회 서비스
+// 유저의 모든 플레이리스트 조회 함수
+export const showUserPlaylistsService = async (userId) => {
+    try {
+        const playlists = await showUserPlaylistsDAO(userId);
+        return playlists;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching user playlists');
+    }
+};
+
+// 플레이리스트 조회 함수
 export const playlistInfoService = async (playlistId) => {
     try {
         const playlistInfo = await playlistInfoDAO(playlistId);
@@ -35,7 +47,7 @@ export const playlistInfoService = async (playlistId) => {
     }
 };
 
-// 플레이리스트에 곡 추가 service
+// 플레이리스트에 곡 추가 함수
 export const addSongsToPlaylistService = async (playlistId, songs) => {
     try {
         await addSongsToPlaylistDAO(playlistId, songs);
