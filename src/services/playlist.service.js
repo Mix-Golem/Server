@@ -1,7 +1,7 @@
 // service에서 실제 구현해야 하는 로직 구현
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO} from "../models/dao/playlist.dao.js";
+import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -32,5 +32,15 @@ export const playlistInfoService = async (playlistId) => {
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching playlist info');
+    }
+};
+
+// 플레이리스트에 곡 추가 service
+export const addSongsToPlaylistService = async (playlistId, songs) => {
+    try {
+        await addSongsToPlaylistDAO(playlistId, songs);
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error adding songs to playlist');
     }
 };

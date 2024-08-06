@@ -32,3 +32,9 @@ export const playlistInfoSql = `
     WHERE sp.id = ?
     GROUP BY sp.id;
 `;
+
+// 플레이리스트에 곡 추가하는 sql문
+export const addSongsToPlaylistSql = `
+    INSERT INTO SONG_PLAYLIST_INFO (SONG_ID, PLAYLIST_ID, \`ORDER\`) 
+    VALUES (?, ?, ?);
+`;

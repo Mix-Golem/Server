@@ -2,7 +2,7 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import {insertPlaylistService, deletePlaylistService, playlistInfoService} from "../services/playlist.service.js";
+import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService } from "../services/playlist.service.js";
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
 // controller 함수
@@ -47,6 +47,20 @@ export const playlistInfoController = async (req, res, next) => {
 
         const playlistInfo = await playlistInfoService(playlistId);
         res.send(response(status.SUCCESS, playlistInfo));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+};
+
+// 플레이리스트에 곡 추가 Controller
+export const addSongsToPlaylistController = async (req, res, next) => {
+    try {
+        const playlistId = req.body.playlistId;
+        const songs = req.body.songs;
+
+        await addSongsToPlaylistService(playlistId, songs);
+        res.send(response(status.SUCCESS, { message: 'Songs added to playlist successfully' }));
     } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
