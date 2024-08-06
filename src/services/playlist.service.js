@@ -29,8 +29,8 @@ export const playlistInfoService = async (playlistId) => {
     try {
         const playlistInfo = await playlistInfoDAO(playlistId);
         return playlistInfo;
-    } catch (error){
+    } catch (error) {
         console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching playlist Information');
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching playlist info');
     }
 };

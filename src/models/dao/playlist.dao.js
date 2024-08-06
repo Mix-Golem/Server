@@ -39,8 +39,8 @@ export const playlistInfoDAO = async (playlistId) => {
         const conn = await pool.getConnection();
         const [rows] = await pool.query(playlistInfoSql, [playlistId]);
         conn.release();
-        return rows;
-    }catch (error){
+        return rows[0]; // 하나의 플레이리스트 결과만 반환
+    } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
