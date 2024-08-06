@@ -22,5 +22,25 @@ export const insertMusicService=async(data)=>{
     }
     
     return insertMusicData;
+}
 
+export const changeinfoMusicService=async(data)=>{
+    const publics=data.public;
+    const genres = data.genre;
+
+    const changeinfoMusicData= await changeinfoMusicDAO(data);
+    for(let i =0; i<publics.length;i++){
+        const publict={
+            type : publics[i]
+        }
+        const changeinfoPublicData=await changeinfoPublicDAO(changeinfoMusicData,publict);
+    }
+    for(let i =0; i<genres.length;i++){
+        const genre={
+            type: genres[i]
+        }
+        const changeinfoGenreData = await changeinfoGenreDAO(changeinfoMusicData,genre);
+    }
+    
+    return changeinfoMusicData;
 }
