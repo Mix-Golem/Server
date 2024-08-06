@@ -1,29 +1,20 @@
-export class RankDTO {
-  constructor(id, userId, thumbnail, title, userName) {
-    this.id = id;
-    this.userId = userId;
-    this.thumbnail = thumbnail;
-    this.title = title;
-    this.userName = userName;
-  }
-}
+export const createRankDTO = (id, userId, thumbnail, title, userName) => {
+  return {
+    id,
+    userId,
+    thumbnail,
+    title,
+    userName,
+  };
+};
 
-export const getRankResponseDTO = (type, data) => {
+export const getRankResponseDTO = (data) => {
   return {
     status: "OK",
     code: 200,
-    message: type === "top" ? "탑랭크 호출" : "투데이 랭크 호출",
+    message: "랭크 호출 성공",
     result: {
-      songs: data.map(
-        (item) =>
-          new RankDTO(
-            item.id,
-            item.userId,
-            item.thumbnail,
-            item.title,
-            item.userName
-          )
-      ),
+      songs: data,
     },
     isSuccess: true,
   };

@@ -5,3 +5,4 @@ export const socialRoute = express.Router();
 socialRoute.get("/rank/:rank", async (req, res) => {
   const result = await rank(req, res);
 });
+  

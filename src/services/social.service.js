@@ -1,53 +1,32 @@
+import { getUserMemberDao, getSongInfoDao } from "../models/dao/social.dao.js";
+import { createRankDTO, getRankResponseDTO } from "../dtos/social.dto.js";
+import { BaseError } from "../../config/error.js";
+import { status } from "../../config/response.status.js";
+
 export const getSocial = async (type) => {
-  if (type === "top") {
-    return [
-      {
-        id: 1,
-        userId: 2,
-        thumbnail: "thumbnailURL1",
-        title: "시흥 밤바다",
-        userName: "김성진",
-      },
-      {
-        id: 2,
-        userId: 3,
-        thumbnail: "thumbnailURL2",
-        title: "",
-        userName: "",
-      },
-      {
-        id: 3,
-        userId: 4,
-        thumbnail: "thumbnailURL3",
-        title: "",
-        userName: "",
-      },
-    ];
-  } else if (type === "today") {
-    return [
-      {
-        id: 1,
-        userId: 5,
-        thumbnail: "",
-        title: "",
-        userName: "",
-      },
-      {
-        id: 2,
-        userId: 6,
-        thumbnail: "thumbnailURL5",
-        title: "",
-        userName: "",
-      },
-      {
-        id: 3,
-        userId: 7,
-        thumbnail: "thumbnailURL6",
-        title: "",
-        userName: "",
-      },
-    ];
-  } else {
-    throw new Error("Invalid type");
+  try {
+    let data;
+    if (type === "top" || type === "today") {
+      const songInfo = await getSongInfoDao();
+      const userMembers = await getUserMemberDao();
+
+       data= songInfo.map((item) =>
+        createRankDTO(
+          item.user_id,
+          item.user_id,
+          item.thumbnail,
+          item.title,
+          userMembers.find((member) => member.id === item.user_id)?.name ||
+            "Unknown"
+        )
+      );
+    } else {
+      throw new BaseError(status.BAD_REQUEST);
+    }
+
+    return getRankResponseDTO(data);
+  } catch (error) {
+    console.error("Service error:", error);
+    throw new BaseError(status.INTERNAL_SERVER_ERROR);
   }
 };
