@@ -2,7 +2,7 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import { insertPlaylistService, deletePlaylistService } from "../services/playlist.service.js";
+import {insertPlaylistService, deletePlaylistService, playlistInfoService} from "../services/playlist.service.js";
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
 // controller 함수
@@ -35,6 +35,19 @@ export const deletePlaylistController = async (req, res, next) => {
         await deletePlaylistService(playlistId);
         res.send(response(status.SUCCESS, {message: 'Playlist delete Success'}));
     } catch (error){ // 오류 발생 : 로그 출력, 에러 응답 전송
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+};
+
+// 플레이리스트 조회 Controller
+export const playlistInfoController = async (req, res, next) => {
+    try {
+        const playlistId = req.params.id;
+
+        const playlistInfo = await playlistInfoService(playlistId);
+        res.send(response(status.SUCCESS, playlistInfo));
+    } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
