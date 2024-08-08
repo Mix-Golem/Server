@@ -1,4 +1,4 @@
-import { getUserMemberDao, getSongInfoDao } from "../models/dao/social.dao.js";
+import { getTopRankDao, getTodayRankDao } from "../models/dao/social.dao.js";
 import { createRankDTO, getRankResponseDTO } from "../dtos/social.dto.js";
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
@@ -6,18 +6,26 @@ import { status } from "../../config/response.status.js";
 export const getSocial = async (type) => {
   try {
     let data;
-    if (type === "top" || type === "today") {
-      const songInfo = await getSongInfoDao();
-      const userMembers = await getUserMemberDao();
-
-       data= songInfo.map((item) =>
+    if (type === "top") {
+      const songInfo = await getTopRankDao();
+      data = songInfo.map((item) =>
         createRankDTO(
           item.user_id,
           item.user_id,
           item.thumbnail,
           item.title,
-          userMembers.find((member) => member.id === item.user_id)?.name ||
-            "Unknown"
+          item.userName || "Unknown"
+        )
+      );
+    } else if (type === "today") {
+      const songInfo = await getTodayRankDao();
+      data = songInfo.map((item) =>
+        createRankDTO(
+          item.user_id,
+          item.user_id,
+          item.thumbnail,
+          item.title,
+          item.userName || "Unknown"
         )
       );
     } else {
