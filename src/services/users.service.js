@@ -73,7 +73,7 @@ export const join = async (req) => {
 		// encrypt password
 		req.password = encrypt(req.password);
 
-		saveUser(req);
+		await saveUser(req);
 
 		return true;
 	} else {
@@ -119,7 +119,17 @@ export const logoutService = async (req) => {
 	return null;
 };
 
+/**
+ * Method to get user info by token
+ * @param {*} req user's information token
+ * @returns user's information
+ */
 export const getUserInfoByToken = async (req) => {
 	let info = verify(req).req;
 	return info;
+};
+
+export const setUserProfileImage = async (token, req) => {
+	let info = verify(token).req;
+	console.log(info);
 };

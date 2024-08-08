@@ -6,6 +6,7 @@ import {
 	login,
 	logout,
 	getUserinfo,
+	setUserProfile,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -36,4 +37,8 @@ usersRoute.post("/logout", async (req, res) => {
 
 usersRoute.get("/info", async (req, res) => {
 	await getUserinfo(req, res);
+});
+
+usersRoute.post("/info/set-profile", async (req, res) => {
+	await setUserProfile(req, res);
 });

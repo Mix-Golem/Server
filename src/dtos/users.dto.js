@@ -27,3 +27,9 @@ export const loginRequestDTO = (req) => {
 		password: req.password,
 	};
 };
+
+export const setProfileRequestDTO = (req) => {
+	return {
+		profile: req.profile,
+	};
+};

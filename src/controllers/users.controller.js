@@ -7,6 +7,7 @@ import {
 	checkVerificationRequestDTO,
 	loginRequestDTO,
 	signupRequestDTO,
+	setProfileRequestDTO,
 } from "../dtos/users.dto.js";
 import {
 	sendVerificationCode,
@@ -15,6 +16,7 @@ import {
 	loginService,
 	logoutService,
 	getUserInfoByToken,
+	setUserProfileImage,
 } from "../services/users.service.js";
 
 //=================================
@@ -120,6 +122,29 @@ export const getUserinfo = async (req, res) => {
 		if (token !== null) {
 			// if token format correct
 			res.send(response(status.SUCCESS, await getUserInfoByToken(token)));
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/info/set-profile
+export const setUserProfile = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+		console.log(req);
+		if (token !== null) {
+			// if token format correct
+			res.send(
+				response(
+					status.SUCCESS,
+					await setUserProfileImage(token, setProfileRequestDTO(req.body))
+				)
+			);
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
