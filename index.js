@@ -10,6 +10,7 @@ import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
 import {sampleRoute} from './src/routes/sample.route.js';
+import { imageUploader } from './config/s3.config.js';
 
 
 
@@ -38,6 +39,8 @@ app.use('/sample',sampleRoute);
 app.get('/', (req, res) => {
     res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });
 })
+//sample은 업로드할때 쓰는 file key 값 
+
 
 
 // error handling
@@ -53,7 +56,7 @@ app.use((err, req, res, next) => {
     // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
     res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
     console.error(err);
-    res.status(err.data.status || status.INTERNAL_SERVER_ERROR).send(response(err.data));
+    res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
 });
 
 app.listen(app.get('port'), () => {
