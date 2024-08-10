@@ -1,6 +1,8 @@
 import { BaseError } from "../../config/error.js";
 import {status} from "../../config/response.status.js"
-import { insertGenreDAO,insertLyricsDAO,insertMusicDAO } from "../models/dao/music.dao.js";
+import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO} from "../models/dao/music.dao.js";
+
+// music을 생성하는 함수
 export const insertMusicService=async(data)=>{
     const lyrics=data.lyrics;
     const genres = data.genre;
@@ -22,25 +24,35 @@ export const insertMusicService=async(data)=>{
     }
     
     return insertMusicData;
-}
+};
 
-export const changeinfoMusicService=async(data)=>{
-    const publics=data.public;
-    const genres = data.genre;
+// music 삭제 함수
+export const deleteMusicService = async (songId) =>{
+    try{
+        await deleteMusicDAO(songId);
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error delete music');
+    }
+};
 
-    const changeinfoMusicData= await changeinfoMusicDAO(data);
-    for(let i =0; i<publics.length;i++){
-        const publict={
-            type : publics[i]
-        }
-        const changeinfoPublicData=await changeinfoPublicDAO(changeinfoMusicData,publict);
-    }
-    for(let i =0; i<genres.length;i++){
-        const genre={
-            type: genres[i]
-        }
-        const changeinfoGenreData = await changeinfoGenreDAO(changeinfoMusicData,genre);
-    }
+// export const changeinfoMusicService=async(data)=>{
+//     const publics=data.public;
+//     const genres = data.genre;
+
+//     const changeinfoMusicData= await changeinfoMusicDAO(data);
+//     for(let i =0; i<publics.length;i++){
+//         const publict={
+//             type : publics[i]
+//         }
+//         const changeinfoPublicData=await changeinfoPublicDAO(changeinfoMusicData,publict);
+//     }
+//     for(let i =0; i<genres.length;i++){
+//         const genre={
+//             type: genres[i]
+//         }
+//         const changeinfoGenreData = await changeinfoGenreDAO(changeinfoMusicData,genre);
+//     }
     
-    return changeinfoMusicData;
-}
+//     return changeinfoMusicData;
+// }

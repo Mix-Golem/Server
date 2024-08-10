@@ -11,11 +11,3 @@ export const MusicInsertRequestDTO=(userId,data,time)=>{
             createdAt: time
     }
 }
-export const MusicChangeinfoRequestDTO=(userId,data)=>{
-    return{
-            id: userId,
-            title: data.title,
-            public: data.public,
-            genre: data.genre,
-    }
-}

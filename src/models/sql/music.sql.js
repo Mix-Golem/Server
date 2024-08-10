@@ -9,3 +9,5 @@ export const getGenreSql= "select id from SONG_GENRE_TB where type =? ;";
 export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) values (?,?);";
 
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
+
+export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
