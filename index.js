@@ -11,8 +11,13 @@ import { status } from "./config/response.status.js";
 import { sampleRoute } from "./src/routes/sample.route.js";
 import { usersRoute } from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
+import { imageUploader } from './config/s3.config.js';
 
-dotenv.config(); // .env 파일 사용 (환경 변수 관리)
+
+
+
+
+dotenv.config();    // .env 파일 사용 (환경 변수 관리)
 
 const app = express();
 
@@ -44,7 +49,16 @@ app.get("/", (req, res) => {
 	});
 });
 
-// ================================
+//route 추가하는 칸
+app.use('/sample',sampleRoute);
+
+
+app.get('/', (req, res) => {
+    res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });
+})
+//sample은 업로드할때 쓰는 file key 값 
+
+
 
 // error handling
 app.use((req, res, next) => {
@@ -53,14 +67,12 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-	// 템플릿 엔진 변수 설정
-	res.locals.message = err.message;
-	// 개발환경이면 에러를 출력하고 아니면 출력하지 않기
-	res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
-	console.error(err);
-	res
-		.status(err.data.status || status.INTERNAL_SERVER_ERROR)
-		.send(response(err.data));
+    // 템플릿 엔진 변수 설정
+    res.locals.message = err.message;
+    // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
+    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
+    console.error(err);
+    res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
 });
 
 app.listen(app.get("port"), () => {
