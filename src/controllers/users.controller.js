@@ -1,6 +1,7 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
+import { profileUploader } from "../services/s3.service.js";
 
 import { checkFormat } from "../middleware/jwt.js";
 import {
@@ -135,19 +136,14 @@ export const getUserinfo = async (req, res) => {
 };
 
 // /users/info/set-profile
-// TODO multipartFile에 대한 처리 필요 / S3 설정해야됨
 export const setUserProfile = async (req, res) => {
 	try {
 		const token = await checkFormat(req.get("Authorization"));
-		console.log(req);
 		if (token !== null) {
 			// if token format correct
-			res.send(
-				response(
-					status.SUCCESS,
-					await setUserProfileImage(token, setProfileRequestDTO(req.body))
-				)
-			);
+			const url = await profileUploader(req, res);
+			await setUserProfileImage(token, url);
+			res.send(response(status.SUCCESS, null));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

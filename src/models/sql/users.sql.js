@@ -23,6 +23,12 @@ export const expireToken =
 	"INSERT INTO USER_TOKEN_EXPIRED_TB(token) VALUES(?);";
 
 /**
+ * SQL that update user's profileImage
+ */
+export const updateProfileById =
+	"UPDATE USER_MEMBER_TB SET profile = ? WHERE id = ?";
+
+/**
  * SQL that find password by uid
  */
 export const findPasswordById =

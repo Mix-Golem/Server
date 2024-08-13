@@ -4,6 +4,7 @@ import {
 	findUser,
 	saveTokenBlacklist,
 	findPassword,
+	updateProfile,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -136,10 +137,11 @@ export const getUserInfoByToken = async (req) => {
  * @param {*} req
  * @returns
  */
-export const setUserProfileImage = async (token, req) => {
-	let uid = verify(token).req.id;
+export const setUserProfileImage = async (token, url) => {
+	const uid = verify(token).req.id;
 	console.log(uid);
-	return null;
+	await updateProfile(uid, url);
+	return;
 };
 
 export const isPasswordCorrect = async (token, req) => {

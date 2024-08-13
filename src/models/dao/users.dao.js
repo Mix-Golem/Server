@@ -5,6 +5,7 @@ import {
 	findUserSql,
 	expireToken,
 	findPasswordById,
+	updateProfileById,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -120,6 +121,28 @@ export const findPassword = async (req) => {
 		const result = await pool.query(findPasswordById, [req]);
 
 		return result[0][0].password;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+// update profileImage by id
+export const updateProfile = async (id, url) => {
+	let conn;
+	try {
+		console.log("---------");
+		console.log("updateProfile called");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(updateProfileById, [url, id]);
+		console.log(url);
+
+		return result[0][0];
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);
