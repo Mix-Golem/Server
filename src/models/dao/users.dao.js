@@ -4,6 +4,7 @@ import {
 	saveUserSql,
 	findUserSql,
 	expireToken,
+	findPasswordById,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -99,6 +100,26 @@ export const saveTokenBlacklist = async (req) => {
 		const result = await pool.query(expireToken, [req]);
 
 		return result;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+// find password by id
+export const findPassword = async (req) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(findPasswordById, [req]);
+
+		return result[0][0].password;
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);

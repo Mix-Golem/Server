@@ -21,3 +21,9 @@ export const findUserSql = "SELECT * FROM USER_MEMBER_TB WHERE email = ?;";
 /** SQL that save token to blacklist */
 export const expireToken =
 	"INSERT INTO USER_TOKEN_EXPIRED_TB(token) VALUES(?);";
+
+/**
+ * SQL that find password by uid
+ */
+export const findPasswordById =
+	"SELECT password FROM USER_MEMBER_TB WHERE id = ?";

@@ -33,3 +33,9 @@ export const setProfileRequestDTO = (req) => {
 		profile: req.profile,
 	};
 };
+
+export const verifyPasswordDTO = (req) => {
+	return {
+		password: req.password,
+	};
+};

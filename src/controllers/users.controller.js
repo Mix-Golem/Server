@@ -8,6 +8,7 @@ import {
 	loginRequestDTO,
 	signupRequestDTO,
 	setProfileRequestDTO,
+	verifyPasswordDTO,
 } from "../dtos/users.dto.js";
 import {
 	sendVerificationCode,
@@ -17,6 +18,7 @@ import {
 	logoutService,
 	getUserInfoByToken,
 	setUserProfileImage,
+	isPasswordCorrect,
 } from "../services/users.service.js";
 
 //=================================
@@ -133,6 +135,7 @@ export const getUserinfo = async (req, res) => {
 };
 
 // /users/info/set-profile
+// TODO multipartFile에 대한 처리 필요 / S3 설정해야됨
 export const setUserProfile = async (req, res) => {
 	try {
 		const token = await checkFormat(req.get("Authorization"));
@@ -145,6 +148,28 @@ export const setUserProfile = async (req, res) => {
 					await setUserProfileImage(token, setProfileRequestDTO(req.body))
 				)
 			);
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/info/verify-password
+export const checkPassword = async (req, res) => {
+	try {
+		// 이새끼 왜 인식 안되냐
+		const token = await checkFormat(req.get("Authorization"));
+		if (token !== null) {
+			// if token format correct
+			if (await isPasswordCorrect(token, verifyPasswordDTO(req.body))) {
+				res.send(response(status.SUCCESS, null));
+			} else {
+				res.send(response(status.LOGIN_PASSWORD_WRONG, null));
+			}
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

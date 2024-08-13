@@ -3,6 +3,7 @@ import {
 	saveUser,
 	findUser,
 	saveTokenBlacklist,
+	findPassword,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -129,7 +130,28 @@ export const getUserInfoByToken = async (req) => {
 	return info;
 };
 
+/**
+ * Method to set users profile image
+ * @param {*} token
+ * @param {*} req
+ * @returns
+ */
 export const setUserProfileImage = async (token, req) => {
-	let info = verify(token).req;
-	console.log(info);
+	let uid = verify(token).req.id;
+	console.log(uid);
+	return null;
+};
+
+export const isPasswordCorrect = async (token, req) => {
+	let uid = verify(token).req.id;
+	const encryptedPassword = await findPassword(uid);
+
+	if (bcrypt.compareSync(req.password, encryptedPassword)) {
+		// if password correct - success
+		return true;
+	} else {
+		// if password doesn't correct - fail
+		console.log("password incorrect");
+		return false;
+	}
 };
