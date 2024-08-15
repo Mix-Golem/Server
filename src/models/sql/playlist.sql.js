@@ -51,3 +51,18 @@ export const addSongsToPlaylistSql = `
 
 // 플레이리스트명 변경하는 SQL문
 export const updatePlaylistNameSql = "UPDATE SONG_PLAYLIST_TB SET TITLE = ? WHERE ID = ?;";
+
+
+// 플레이리스트에 노래 순서 변경 SQL문
+// 기존 노래의 순서를 뒤로 밀어내는 SQL문
+export const shiftSongsOrderSql = `
+    UPDATE SONG_PLAYLIST_INFO 
+    SET \`ORDER\` = \`ORDER\` + 1 
+    WHERE PLAYLIST_ID = ? AND \`ORDER\` >= ?;
+`;
+// 노래의 순서를 업데이트하는 SQL문
+export const updateSongOrderSql = `
+    UPDATE SONG_PLAYLIST_INFO 
+    SET \`ORDER\` = ? 
+    WHERE PLAYLIST_ID = ? AND SONG_ID = ?;
+`;
