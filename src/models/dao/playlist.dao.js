@@ -1,7 +1,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, showUserPlaylistsSql} from "../sql/playlist.sql.js";
+import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, showUserPlaylistsSql, updatePlaylistNameSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -70,5 +70,17 @@ export const addSongsToPlaylistDAO = async (playlistId, songs) => {
     } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
+
+// 플레이리스트명 변경하는 DAO
+export const updatePlaylistNameDAO = async (playlistId, newTitle) => {
+    try {
+        const conn = await pool.getConnection();
+        await pool.query(updatePlaylistNameSql, [newTitle, playlistId]);
+        conn.release();
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG, 'Error updating playlist name');
     }
 };

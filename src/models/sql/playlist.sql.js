@@ -48,3 +48,6 @@ export const addSongsToPlaylistSql = `
     INSERT INTO SONG_PLAYLIST_INFO (SONG_ID, PLAYLIST_ID, \`ORDER\`) 
     VALUES (?, ?, ?);
 `;
+
+// 플레이리스트명 변경하는 SQL문
+export const updatePlaylistNameSql = "UPDATE SONG_PLAYLIST_TB SET TITLE = ? WHERE ID = ?;";
