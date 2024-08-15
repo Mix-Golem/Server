@@ -11,3 +11,18 @@ export const MusicInsertRequestDTO=(userId,data,time)=>{
             createdAt: time
     }
 }
+
+export const insertFavoriteRequestDTO = (userId,date,data)=>{
+    return {
+        userId : userId,
+        createdAt : date,
+        songId : data.songId
+    }
+}
+
+export const FavoriteRequestDTO = (userId,data)=>{
+    return {
+        userId : userId,
+        songId :  Number(data.songId)
+    }
+}

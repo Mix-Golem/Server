@@ -11,3 +11,9 @@ export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) valu
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
 
 export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
+
+export const insertLikeSQL ="insert INTO SONG_FAVORITE_TB(user_id,song_id,created_at) values (?,?,?);";
+
+export const deleteLikeSQL = "delete from SONG_FAVORITE_TB WHERE  user_id =? and song_id =?;";
+
+export const isLikeSQL = "select EXISTS (select * from SONG_FAVORITE_TB where user_id =? and song_id =? limit 1) as success;"

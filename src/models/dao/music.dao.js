@@ -5,7 +5,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql } from "../sql/music.sql.js";
+import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL } from "../sql/music.sql.js";
 
 // music 생성하는 DAO
 export const insertMusicDAO=async(data)=>{
@@ -61,9 +61,57 @@ export const deleteMusicDAO = async (songId) =>{
     try {
         const conn = await pool.getConnection();
         await pool.query(deleteMusicSql, [songId]);
-        conn.release;
+        conn.release();
     }catch (error){
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
 };
+
+//좋아요 관련 DAO
+
+export const insertFavoriteDAO = async (req) => {
+    try {
+        console.log(req);
+        const conn = await pool.getConnection();
+        const like =await pool.query(insertLikeSQL, [req.userId,req.songId,req.createdAt]);
+        conn.release();
+        return "success";
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const deleteFavoriteDAO = async (req)=>{
+    try {
+        const conn= await pool.getConnection();
+        const like = await pool.query(deleteLikeSQL,[req.userId,req.songId]);
+        conn.release();
+        return "success";
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const isFavoriteDAO = async(req)=>{
+    try{
+        console.log(req);
+        const conn= await pool.getConnection();
+        const [rows] = await pool.query(isLikeSQL,[req.userId,req.songId]);
+        console.log("찾기 여부",rows[0].success);
+        conn.release();
+
+        const isLike = rows[0].success;
+        if(isLike===1){
+            return false
+        }else{
+            return true
+        }
+        
+    }catch(error){
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
