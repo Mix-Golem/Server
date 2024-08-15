@@ -1,7 +1,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, showUserPlaylistsSql, updatePlaylistNameSql, shiftSongsOrderSql, updateSongOrderSql} from "../sql/playlist.sql.js";
+import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, showUserPlaylistsSql, updatePlaylistNameSql, reorderSongsSql, updateSongOrderSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -86,19 +86,22 @@ export const updatePlaylistNameDAO = async (playlistId, newTitle) => {
 };
 
 // 플레이리스트 내 곡 순서 변경하는 DAO
-export const updateSongOrderDAO = async (playlistId, songId, newOrder) => {
+export const updateAndReorderSongsDAO = async (playlistId, songId, newOrder) => {
     try {
         const conn = await pool.getConnection();
 
-        // 기존 순서에 있는 노래들의 순서를 모두 1씩 증가
-        await pool.query(shiftSongsOrderSql, [playlistId, newOrder]);
-
-        // 노래의 순서를 업데이트
+        // 대상 노래의 순서를 업데이트
         await pool.query(updateSongOrderSql, [newOrder, playlistId, songId]);
+
+        // rownum 초기화
+        await pool.query("SET @rownum := 0;");
+
+        // 모든 노래의 순서를 1부터 다시 정렬
+        await pool.query(reorderSongsSql, [playlistId]);
 
         conn.release();
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.PARAMETER_IS_WRONG, 'Error updating song order');
+        throw new BaseError(status.PARAMETER_IS_WRONG, 'Error updating and reordering songs');
     }
 };

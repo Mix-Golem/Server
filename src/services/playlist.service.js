@@ -1,7 +1,7 @@
 // service에서 실제 구현해야 하는 로직 구현
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO, updateSongOrderDAO} from "../models/dao/playlist.dao.js";
+import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO, updateAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -67,12 +67,12 @@ export const updatePlaylistNameService = async (playlistId, newTitle) => {
     }
 };
 
-// 플레이리스트 노래 순서 변경하는 서비스 함수
-export const updateSongOrderService = async (playlistId, songId, newOrder) => {
+// 플레이리스트 노래 순서 변경하는 서비스 함수(모든 노래의 순서를 1부터 재정렬)
+export const updateAndReorderSongsService = async (playlistId, songId, newOrder) => {
     try {
-        await updateSongOrderDAO(playlistId, songId, newOrder);
+        await updateAndReorderSongsDAO(playlistId, songId, newOrder);
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error updating song order');
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error updating and reordering songs');
     }
 };

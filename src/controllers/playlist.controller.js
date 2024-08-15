@@ -2,7 +2,7 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService, updateSongOrderService } from "../services/playlist.service.js";
+import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService, updateAndReorderSongsService } from "../services/playlist.service.js";
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
 // 플레이리스트 생성 Controller
@@ -96,16 +96,16 @@ export const updatePlaylistNameController = async (req, res, next) => {
 };
 
 // 플레이리스트 노래 순서 변경하는 controller
-export const updateSongOrderController = async (req, res, next) => {
+export const updateAndReorderSongsController = async (req, res, next) => {
     try {
-        const playlistId = req.params.playlistId;  // URL에서 playlistId를 가져옴
-        const songId = req.body.songId;  // body에서 songId를 가져옴
-        const newOrder = req.body.order;  // body에서 새로운 순서를 가져옴
+        const playlistId = req.params.playlistId;  // URL에서 playlistId를 가져옵니다.
+        const songId = req.body.songId;  // 요청 본문에서 songId를 가져옵니다.
+        const newOrder = req.body.order;  // 요청 본문에서 새로운 순서를 가져옵니다.
 
-        await updateSongOrderService(playlistId, songId, newOrder);
-        res.send(response(status.SUCCESS, { message: 'Song order updated successfully' }));
+        await updateAndReorderSongsService(playlistId, songId, newOrder);
+        res.send(response(status.SUCCESS, { message: 'Song order updated and reordered successfully' }));
     } catch (error) {
         console.error(error);
-        res.send(response(status.INTERNAL_SERVER_ERROR, 'Error updating song order'));
+        res.send(response(status.INTERNAL_SERVER_ERROR, 'Error updating and reordering songs'));
     }
 };
