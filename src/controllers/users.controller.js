@@ -81,12 +81,12 @@ export const signup = async (req, res) => {
 
 // /users/signup/kakao
 export const signupKakao = async (req, res) => {
-	// const headers = req.headers["authorization"];
-	// const kakaoToken = headers.split(" ")[1];
+	const headers = req.get("Authorization");
+	const kakaoToken = headers.split(" ")[1];
 
 	// test token for backend (발금해서 써야됨)
-	const kakaoToken =
-		"a1iUUuSQEPut2buTAPiRswwmjqS0gdE6AAAAAQoqJVAAAAGRXwJAAcLen3w93lOl";
+	// const kakaoToken =
+	// 	"a1iUUuSQEPut2buTAPiRswwmjqS0gdE6AAAAAQoqJVAAAAGRXwJAAcLen3w93lOl";
 
 	const accessToken = await signupKakaoService(kakaoToken);
 
