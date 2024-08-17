@@ -2,8 +2,8 @@ import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import  jwt  from "jsonwebtoken";
-import { insertMusicService ,changeinfoMusicService} from "../services/music.service.js";
-import { MusicInsertRequestDTO ,MusicChangeinfoRequestDTO} from "../dtos/music.dto.js";
+import { insertMusicService ,musicInfoService, changeinfoMusicService} from "../services/music.service.js";
+import { MusicInsertRequestDTO} from "../dtos/music.dto.js";
 
 
 // music 생성 Controller
@@ -22,16 +22,29 @@ export const insertMusicController=async(req,res,next)=>{
     }
 };
 
-// music 삭제 컨트롤러
-export const deleteMusicController = async(req,res,next)=>{
-    try{
+// music info 불러오는 Controller
+export const musicInfoController = async (req, res, next) => {
+    try {
         const songId = req.params.id;
 
-        // 서비스 함수 호출 -> music 삭제
-        await deleteMusicService(songId);
-        res.send(response(status.SUCCESS, {message: 'Music delete Success'}));
+        const musicInfo = await musicInfoService(songId);
+        res.send(response(status.SUCCESS, musicInfo));
     } catch (error) {
         console.error(error);
-        res.send(response.BaseError(status.BAD_REQUEST));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 };
+
+// music 삭제 컨트롤러
+// export const deleteMusicController = async(req,res,next)=>{
+//     try{
+//         const songId = req.params.id;
+
+//         // 서비스 함수 호출 -> music 삭제
+//         await deleteMusicService(songId);
+//         res.send(response(status.SUCCESS, {message: 'Music delete Success'}));
+//     } catch (error) {
+//         console.error(error);
+//         res.send(response.BaseError(status.BAD_REQUEST));
+//     }
+// };

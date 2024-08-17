@@ -56,14 +56,27 @@ export const insertGenreDAO=async(musicId,data)=>{
     }
 }
 
-// music 삭제하는 DAO
-export const deleteMusicDAO = async (songId) =>{
+// music 조회 DAO
+export const musicInfoDAO = async (songId) => {
     try {
         const conn = await pool.getConnection();
-        await pool.query(deleteMusicSql, [songId]);
-        conn.release;
-    }catch (error){
+        const [rows] = await pool.query(musicInfoSql, [songId]);
+        conn.release();
+        return rows[0];
+    } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
 };
+
+// music 삭제하는 DAO
+// export const deleteMusicDAO = async (songId) =>{
+//     try {
+//         const conn = await pool.getConnection();
+//         await pool.query(deleteMusicSql, [songId]);
+//         conn.release;
+//     }catch (error){
+//         console.error(error);
+//         throw new BaseError(status.PARAMETER_IS_WRONG);
+//     }
+// };
