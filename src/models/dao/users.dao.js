@@ -70,6 +70,39 @@ export const saveUser = async (req) => {
 	}
 };
 
+// insert user
+export const saveSocialUser = async (req) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+		const result = await pool.query(saveUserSql, [
+			req.email,
+			req.password,
+			req.name,
+			req.phonenumber,
+			req.gender,
+			req.birth,
+			0,
+			req.profile,
+			null,
+			req.provider,
+			"USER",
+			new Date(),
+			new Date(),
+		]);
+
+		return null;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
 // bring encrypted password
 export const findUser = async (req) => {
 	let conn;

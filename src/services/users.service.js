@@ -5,12 +5,15 @@ import {
 	saveTokenBlacklist,
 	findPassword,
 	updateProfile,
+	saveSocialUser,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import { encrypt } from "../middleware/encrypt.js";
 import { createJwt, verify } from "../middleware/jwt.js";
+import { profileUploader } from "./s3.service.js";
+import axios from "axios";
 
 dotenv.config();
 
@@ -84,6 +87,43 @@ export const join = async (req) => {
 	}
 };
 
+export const signupKakaoService = async (kakaoToken) => {
+	const result = await axios.get("https://kapi.kakao.com/v2/user/me", {
+		headers: {
+			Authorization: `Bearer ${kakaoToken}`,
+			"Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+		},
+	});
+	const { data } = result;
+	console.log(data);
+	const name = data.properties.nickname;
+	const email = data.kakao_account.email;
+	// const kakaoId = data.id;
+	const profileImage = data.properties.profile_image;
+
+	if (!name || !email) throw new error("KEY_ERROR", 400);
+
+	const user = await findUser(email);
+
+	const userData = {
+		email: email,
+		password: "-",
+		passwordCheck: "-",
+		name: name,
+		phonenumber: "-",
+		gender: "-",
+		birth: "-",
+		profile: profileImage,
+		provider: "KAKAO",
+	};
+
+	if (!user) {
+		await saveSocialUser(userData);
+	}
+
+	return createJwt(user);
+};
+
 /**
  * Method to login user
  * @param {*} req loginRequestDTO
@@ -144,6 +184,12 @@ export const setUserProfileImage = async (token, url) => {
 	return;
 };
 
+/**
+ *
+ * @param {*} token
+ * @param {*} req
+ * @returns
+ */
 export const isPasswordCorrect = async (token, req) => {
 	let uid = verify(token).req.id;
 	const encryptedPassword = await findPassword(uid);
