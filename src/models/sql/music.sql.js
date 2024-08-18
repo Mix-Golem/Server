@@ -10,6 +10,13 @@ export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) valu
 
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
 
-export const musicInfoSql = "SELECT si.id AS song_id,si.user_id AS user_id,si.title AS title,si.about AS description,si.created_at AS created_at,si.media AS media_url,si.public AS is_public,si.thumbnail AS thumbnail_url,si.prompt AS prompt_description FROM SONG_INFO_TB si WHERE si.id = ?;"
+
 
 // export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
+
+
+export const findmusicInfoSql ="select SI.id as id ,SI.user_id as userId, UM.name,SI.title,SI.about,SI.prompt,SI.media,SI.public,SI.thumbnail  from SONG_INFO_TB SI join USER_MEMBER_TB UM on SI.user_id = UM.id where SI.id=?;";
+
+export const findLyricsSQL = "select * from SONG_LYRIC_TB where song_id=?;"
+
+export const countFavoriteSQL ="SELECT song_id, COUNT(*) AS song_count FROM SONG_FAVORITE_TB GROUP BY song_id having song_id=?;"

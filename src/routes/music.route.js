@@ -1,6 +1,6 @@
 import express from "express";
 import { insertMusicController ,
-        getMusicinfoController, 
+    musicInfoController, 
         deleteMusicController,
         changeinfoMusicControler} from "../controllers/music.controller";
 export const musicRoute= express.Router();
@@ -11,8 +11,8 @@ musicRoute.post('',async(req,res)=>{
 })
 
 // music info 불러오기
-musicRoute.get("/info", async (req,res)=>{
-    await getMusicinfoController(req,res);
+musicRoute.get("/info/:id", async (req,res)=>{
+    const result = await musicInfoController(req,res);
 })
 
 // music 삭제하기

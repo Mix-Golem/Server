@@ -1,6 +1,7 @@
 import { BaseError } from "../../config/error.js";
 import {status} from "../../config/response.status.js"
-import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,musicInfoDAO,deleteMusicDAO} from "../models/dao/music.dao.js";
+import { findLyricsResponseDTO, findMusicInfoResponseDTO } from "../dtos/music.dto.js";
+import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,musicInfoDAO,deleteMusicDAO, countFavoriteDAO, findLyricsDAO} from "../models/dao/music.dao.js";
 
 // music을 생성하는 함수
 export const insertMusicService=async(data)=>{
@@ -29,8 +30,18 @@ export const insertMusicService=async(data)=>{
 // music 조회 함수
 export const musicInfoService = async (songId) => {
     try {
+        //곡 전체 데이터
         const musicInfo = await musicInfoDAO(songId);
-        return musicInfo;
+        //
+        const countData = await countFavoriteDAO(songId);
+
+        const lyrics = await findLyricsDAO(songId);
+        const lyricsData=[];
+
+        for(let i = 0; i< lyrics.length;i++){
+            lyricsData.push(findLyricsResponseDTO(lyrics[i]));
+        }
+        return findMusicInfoResponseDTO(lyricsData,countData,musicInfo);
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music info');
