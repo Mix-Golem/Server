@@ -259,5 +259,5 @@ export const updateUserInfo = async (token, req) => {
 
 	user.password = "hidden";
 
-	return user;
+	return createJwt(user);
 };
