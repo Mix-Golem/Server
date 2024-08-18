@@ -124,6 +124,42 @@ export const signupKakaoService = async (kakaoToken) => {
 	return createJwt(user);
 };
 
+export const signupGoogleService = async (googleToken) => {
+	const result = await axios.get("https://www.googleapis.com/userinfo/v2/me", {
+		headers: {
+			Authorization: `Bearer ${googleToken}`,
+		},
+	});
+
+	const { data } = result;
+	console.log(data);
+	const name = data.name;
+	const email = data.email;
+	// const profileImage = data.properties.profile_image;
+
+	if (!name || !email) throw new error("KEY_ERROR", 400);
+
+	const user = await findUser(email);
+
+	const userData = {
+		email: email,
+		password: "-",
+		passwordCheck: "-",
+		name: name,
+		phonenumber: "-",
+		gender: "-",
+		birth: "-",
+		profile: "-",
+		provider: "GOOGLE",
+	};
+
+	if (!user) {
+		await saveSocialUser(userData);
+	}
+
+	return createJwt(user);
+};
+
 /**
  * Method to login user
  * @param {*} req loginRequestDTO

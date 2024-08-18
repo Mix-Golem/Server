@@ -21,6 +21,7 @@ import {
 	setUserProfileImage,
 	isPasswordCorrect,
 	signupKakaoService,
+	signupGoogleService,
 } from "../services/users.service.js";
 
 //=================================
@@ -89,6 +90,15 @@ export const signupKakao = async (req, res) => {
 	// 	"a1iUUuSQEPut2buTAPiRswwmjqS0gdE6AAAAAQoqJVAAAAGRXwJAAcLen3w93lOl";
 
 	const accessToken = await signupKakaoService(kakaoToken);
+
+	res.send(response(status.SUCCESS, accessToken));
+};
+
+export const signupGoogle = async (req, res) => {
+	const headers = req.get("Authorization");
+	const googleToken = headers.split(" ")[1];
+
+	const accessToken = await signupGoogleService(googleToken);
 
 	res.send(response(status.SUCCESS, accessToken));
 };

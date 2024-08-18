@@ -9,6 +9,7 @@ import {
 	setUserProfile,
 	checkPassword,
 	signupKakao,
+	signupGoogle,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -51,4 +52,8 @@ usersRoute.post("/info/verify-password", async (req, res) => {
 
 usersRoute.post("/signup/kakao", async (req, res) => {
 	await signupKakao(req, res);
+});
+
+usersRoute.post("/signup/google", async (req, res) => {
+	await signupGoogle(req, res);
 });
