@@ -10,6 +10,7 @@ import {
 	signupRequestDTO,
 	setProfileRequestDTO,
 	verifyPasswordDTO,
+	updateUserRequestDTO,
 } from "../dtos/users.dto.js";
 import {
 	sendVerificationCode,
@@ -22,6 +23,7 @@ import {
 	isPasswordCorrect,
 	signupKakaoService,
 	signupGoogleService,
+	updateUserInfo,
 } from "../services/users.service.js";
 
 //=================================
@@ -191,6 +193,24 @@ export const checkPassword = async (req, res) => {
 			} else {
 				res.send(response(status.LOGIN_PASSWORD_WRONG, null));
 			}
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/info/update
+export const updateUser = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+		if (token !== null) {
+			// if token format correct
+			const info = await updateUserInfo(token, updateUserRequestDTO(req.body));
+			res.send(response(status.SUCCESS, info));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

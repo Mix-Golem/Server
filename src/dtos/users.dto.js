@@ -39,3 +39,11 @@ export const verifyPasswordDTO = (req) => {
 		password: req.password,
 	};
 };
+
+export const updateUserRequestDTO = (req) => {
+	return {
+		name: req.name,
+		introduce: req.introduce,
+		password: req.password,
+	};
+};

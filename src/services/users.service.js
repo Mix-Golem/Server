@@ -6,6 +6,8 @@ import {
 	findPassword,
 	updateProfile,
 	saveSocialUser,
+	updateUserWithoutPassword,
+	updateUserWithPassword,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -220,12 +222,6 @@ export const setUserProfileImage = async (token, url) => {
 	return;
 };
 
-/**
- *
- * @param {*} token
- * @param {*} req
- * @returns
- */
 export const isPasswordCorrect = async (token, req) => {
 	let uid = verify(token).req.id;
 	const encryptedPassword = await findPassword(uid);
@@ -238,4 +234,30 @@ export const isPasswordCorrect = async (token, req) => {
 		console.log("password incorrect");
 		return false;
 	}
+};
+
+export const updateUserInfo = async (token, req) => {
+	let info = verify(token).req;
+
+	if (req.name == null || req.name == undefined) {
+		req.name = info.name;
+	}
+	if (req.introduce == null || req.introduce == undefined) {
+		console.log(info.introduce);
+		req.introduce = info.introduce;
+		console.log(req.introduce);
+	}
+
+	if (req.password == null || req.password == undefined) {
+		await updateUserWithoutPassword(req, info.id);
+	} else {
+		req.password = encrypt(req.password);
+		await updateUserWithPassword(req, info.id);
+	}
+
+	const user = await findUser(info.email);
+
+	user.password = "hidden";
+
+	return user;
 };

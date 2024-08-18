@@ -33,3 +33,9 @@ export const updateProfileById =
  */
 export const findPasswordById =
 	"SELECT password FROM USER_MEMBER_TB WHERE id = ?";
+
+export const updateUserInfoWithoutPasswordSql =
+	"UPDATE USER_MEMBER_TB SET name = ?, introduce = ? WHERE id = ?";
+
+export const updateUserInfoWithPasswordSql =
+	"UPDATE USER_MEMBER_TB SET name = ?, introduce = ?, password = ? WHERE id = ?";

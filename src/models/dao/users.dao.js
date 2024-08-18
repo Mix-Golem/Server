@@ -6,6 +6,8 @@ import {
 	expireToken,
 	findPasswordById,
 	updateProfileById,
+	updateUserInfoWithoutPasswordSql,
+	updateUserInfoWithPasswordSql,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -176,6 +178,55 @@ export const updateProfile = async (id, url) => {
 		console.log(url);
 
 		return result[0][0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const updateUserWithoutPassword = async (req, uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		console.log("updateProfile called");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(updateUserInfoWithoutPasswordSql, [
+			req.name,
+			req.introduce,
+			uid,
+		]);
+
+		return null;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const updateUserWithPassword = async (req, uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		console.log("updateProfile called");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(updateUserInfoWithPasswordSql, [
+			req.name,
+			req.introduce,
+			req.password,
+			uid,
+		]);
+
+		return null;
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);
