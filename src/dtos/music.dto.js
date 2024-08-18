@@ -38,3 +38,11 @@ export const findMusicInfoResponseDTO = (lyrics,favorite,musicData)=>{
 
     }
 }
+
+export const ChangeinfoMusicRequestDTO = (changeData)=>{
+    return{
+        id: changeData.id,
+        title: changeData.title,
+        public: changeData.public
+    }
+}
