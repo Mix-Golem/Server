@@ -9,6 +9,10 @@ export const sampleRoute = express.Router();
 sampleRoute.get('/sample',async(req,res)=>{
     const result = await findSample(req,res);
 })
+
+sampleRoute.post('/sample',async(req,res)=>{
+    const result =await insertSampe(req,res);
+
 //imageUploder.single은 middleWare 함수라 비동기적으로 처리해야함
 sampleRoute.post('/upload', imageUploader.single('sample'), (req, res) => {
     //api가 실행되면, imageUploader.single (파일을 하나만 올릴수 있도록)함수가 실행되고, req.file이란 객체가 생성된다.
@@ -23,4 +27,5 @@ sampleRoute.post('/upload', imageUploader.single('sample'), (req, res) => {
 //promise를 통해 함수화 한거
 sampleRoute.post('/uploads', async(req,res)=>{
     res.send(response(status.SUCCESS,await s3Uploader(req,res)));
+
 })

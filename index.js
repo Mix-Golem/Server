@@ -10,7 +10,11 @@ import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
 import {sampleRoute} from './src/routes/sample.route.js';
+
+import { musicRoute } from './src/routes/music.route.js';
+
 import { imageUploader } from './config/s3.config.js';
+
 
 
 
@@ -34,7 +38,7 @@ app.use(express.urlencoded({extended: false})); // 단순 객체 문자열 형�
 
 //route 추가하는 칸
 app.use('/sample',sampleRoute);
-
+app.use('/music',musicRoute);
 
 app.get('/', (req, res) => {
     res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });

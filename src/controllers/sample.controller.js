@@ -7,8 +7,10 @@ import { getSample } from "../services/sample.service.js";
 
 export const findSample = async (req,res,next)=>{
     try{
+        const requestData= await sampleRequestDto(req);
+        
         //dto 객체 가져오기
-       res.send(response(status.SUCCESS,await getSample(sampleRequestDto(req))));
+       res.send(response(status.SUCCESS,await getSample(requestData)));
 
     }catch(error){
         res.send(response(status.BaseError));
