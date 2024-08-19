@@ -68,4 +68,4 @@ jobs:
             sudo docker tag ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7} ${{ secrets.PROJECT_NAME }}
             sudo docker stop ${{ secrets.PROJECT_NAME }}
             sudo docker rm ${{ secrets.PROJECT_NAME }}
-            sudo docker run -d --name ${{ secrets.PROJECT_NAME }} -p 80:3000 ${{ secrets.PROJECT_NAME }}
+            sudo docker run -d --name ${{ secrets.PROJECT_NAME }} -p 5000:3000 ${{ secrets.PROJECT_NAME }}
