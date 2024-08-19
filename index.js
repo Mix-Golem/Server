@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
     console.error(err);
     res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
 });
-
+//sample
 app.listen(app.get('port'), () => {
     console.log(`Example app listening on port ${app.get('port')}`);
 });
