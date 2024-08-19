@@ -38,7 +38,8 @@
 		"mysql2": "^2.1.0",
 		"path": "^0.12.7",
 		"sequelize": "^6.3.4",
-		"validator": "^13.1.1"
+		"validator": "^13.1.1",
+		"webpack-node-externals": "^3.0.0"
 	},
 	"babel": {
 		"presets": [
