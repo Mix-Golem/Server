@@ -15,3 +15,10 @@ export const getRankResponseDTO = (data) => {
     },
   };
 };
+
+export const followDTO = (req) => {
+  return {
+    followerId: req.followerId,
+    followingId: req.followingId,
+  };
+};
