@@ -71,6 +71,7 @@ jobs:
             echo "export DB_HOST=${{ secrets.DB_HOST }}" >> ~/.bashrc
             echo "export DB_USER=${{ secrets.DB_USER }}" >> ~/.bashrc
             echo "export DB_PORT=${{ secrets.DB_PORT }}" >> ~/.bashrc
+            echo "export DB_TABLE=${{ secrets.DB_TABLE }}" >> ~/.bashrc
             echo "export DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ~/.bashrc
             
             # 적용된 환경변수 재로드
@@ -91,4 +92,5 @@ jobs:
               -e DB_USER=${{ secrets.DB_USER }} \
               -e DB_PORT=${{ secrets.DB_PORT }} \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e DB_TABLE=${{ secrets.DB_TABLE}} \
               ${{ secrets.PROJECT_NAME }}
