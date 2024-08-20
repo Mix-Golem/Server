@@ -22,23 +22,22 @@ export const insertMusicController=async(req,res,next)=>{
     }
 };
 
-// music 삭제 컨트롤러
-export const deleteMusicController = async(req,res,next)=>{
-    try{
+// music info 불러오는 Controller
+export const musicInfoController = async (req, res, next) => {
+    try {
         const songId = req.params.id;
 
-        // 서비스 함수 호출 -> music 삭제
-        await deleteMusicService(songId);
-        res.send(response(status.SUCCESS, {message: 'Music delete Success'}));
+        const musicInfo = await musicInfoService(songId);
+        res.send(response(status.SUCCESS, musicInfo));
     } catch (error) {
         console.error(error);
-        res.send(response.BaseError(status.BAD_REQUEST));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 };
 
 export const insertFavoriteController = async(req,res,next)=>{
     try {
-        const token = req.headers.authorization;
+        const token = req.headers.authorization.split(' ')[1];;
         console.log(token);
         const decoded = jwt.decode(token);
         console.log(decoded)
@@ -53,7 +52,7 @@ export const insertFavoriteController = async(req,res,next)=>{
 
 export const deleteFavoriteController = async(req,res,next)=>{
     try {
-        const token = req.headers.authorization;
+        const token = req.headers.authorization.split(' ')[1];;
         console.log(token);
         const decoded = jwt.decode(token);
         console.log(decoded)
@@ -68,7 +67,7 @@ export const deleteFavoriteController = async(req,res,next)=>{
 
 export const findFavoriteController = async(req,res,next)=>{
     try {
-        const token = req.headers.authorization;
+        const token = req.headers.authorization.split(' ')[1];;
         console.log(token);
         const decoded = jwt.decode(token);
         console.log(decoded)
