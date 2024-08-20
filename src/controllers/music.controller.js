@@ -69,7 +69,24 @@ export const musicHistoryController = async (req, res, next) => {
         const musicHistory = await musicHistoryService(userId);
         console.log("History 컨트롤러 작동", musicHistory);
         res.send(response(status.SUCCESS, musicHistory));
-    } catch {
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+}
+
+// music my-song 불러오는 Controller
+export const getmySong = async (req,res,next) => {
+    try{
+        const token = req.headers.authorization.split(' ')[1];;
+        console.log(token);
+        const decoded = jwt.decode(token);
+        console.log(decoded);
+        const userId = decoded.req.id;
+        const mySong = await mySongService(userId);
+        console.log("mySong 컨트롤러 작동", mySong);
+        res.send(response(status.SUCCESS, mySong));
+    } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }

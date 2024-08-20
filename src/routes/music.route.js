@@ -3,7 +3,8 @@ import { insertMusicController ,
         musicInfoController, 
         deleteMusicController,
         musicHistoryController,
-        changeinfoMusicController} from "../controllers/music.controller";
+        changeinfoMusicController,
+        getmySong} from "../controllers/music.controller";
 export const musicRoute= express.Router();
 
 // music 생성하기
@@ -26,6 +27,9 @@ musicRoute.get("/history", async (req,res)=>{
     await musicHistoryController(req,res);
 })
 
+musicRoute.get("/my-song", async (req,res)=> {
+    await getmySong(req,res);
+})
 // music 삭제하기
 // musicRoute.delete('/:id',async(req,res)=>{
 //     await deleteMusicController(req,res);
