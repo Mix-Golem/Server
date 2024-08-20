@@ -46,7 +46,7 @@ export const insertFavoriteController = async(req,res,next)=>{
         res.send(response(status.SUCCESS, await insertFavoriteService(insertFavoriteRequestDTO(userId,date,req.body))));
     } catch (error) {
         console.error(error);
-        res.send(response.BaseError(status.BAD_REQUEST));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 }
 
@@ -61,7 +61,7 @@ export const deleteFavoriteController = async(req,res,next)=>{
         res.send(response(status.SUCCESS, await deleteFavoriteService(FavoriteRequestDTO(userId,req.body))));
     } catch (error) {
         console.error(error);
-        res.send(response.BaseError(status.BAD_REQUEST));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 }
 
@@ -76,6 +76,6 @@ export const findFavoriteController = async(req,res,next)=>{
         res.send(response(status.SUCCESS, await isFavoriteService(FavoriteRequestDTO(userId,req.query))));
     } catch (error) {
         console.error(error);
-        res.send(response.BaseError(status.BAD_REQUEST));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 }
