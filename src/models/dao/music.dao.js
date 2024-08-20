@@ -5,7 +5,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import { insertGenreSql, insertLyricsSql, insertMusicGenreSql, insertMusicSql, findGenreSql, getGenreSql, findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL } from "../sql/music.sql.js";
+import { insertGenreSql, insertLyricsSql, insertMusicGenreSql, insertMusicSql, findGenreSql, getGenreSql, findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql } from "../sql/music.sql.js";
 
 // music 생성하는 DAO
 export const insertMusicDAO = async (data) => {
@@ -69,6 +69,7 @@ export const musicInfoDAO = async (songId) => {
     }
 };
 
+// 가사 데이터 찾아오는 DAO
 export const findLyricsDAO = async (songId) => {
     try {
         const conn = await pool.getConnection();
@@ -81,6 +82,8 @@ export const findLyricsDAO = async (songId) => {
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
 };
+
+// 좋아요 개수 찾아오는 DAO
 export const countFavoriteDAO = async (songId) => {
     try {
         const conn = await pool.getConnection();
@@ -93,6 +96,7 @@ export const countFavoriteDAO = async (songId) => {
     }
 };
 
+// 노래 정보 업데이트 해주는 DAO
 export const updateSongInfoDAO = async(changeData) => {
     try {
         const conn = await pool.getConnection();
@@ -109,6 +113,18 @@ export const updateSongInfoDAO = async(changeData) => {
     }
 }
 
+// 노래 히스토리 가져와주는 DAO
+export const musicHistoryDAO = async (userId) => {
+    try {
+        const conn = await pool.getConnection();
+        const [rows] = await pool.query(findmusicHistorySql, [userId]);
+        conn.release();
+        return rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
 
 // music 삭제하는 DAO
 // export const deleteMusicDAO = async (songId) =>{

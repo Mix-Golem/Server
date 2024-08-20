@@ -46,3 +46,13 @@ export const ChangeinfoMusicRequestDTO = (changeData)=>{
         public: changeData.public
     }
 }
+
+export const findMusicHistoryResponseDTO = (historyData) =>{
+    return{
+        id:historyData.id,
+        userId:historyData.userId,
+        userName:historyData.userName,
+        title:historyData.title,
+        thumbnail:historyData.thumbnail
+    }
+}

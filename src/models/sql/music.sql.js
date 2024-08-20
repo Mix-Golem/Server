@@ -19,3 +19,5 @@ export const findLyricsSQL = "select * from SONG_LYRIC_TB where song_id=?;"
 export const countFavoriteSQL ="SELECT song_id, COUNT(*) AS song_count FROM SONG_FAVORITE_TB GROUP BY song_id having song_id=?;"
 
 export const updateSongInfoSQL = "UPDATE SONG_INFO_TB SET title = ?, public = ? WHERE id = ?";
+
+export const findmusicHistorySql = "SELECT uh.id AS id,um.id AS userId,um.name AS userName,si.title AS title,si.thumbnail AS thumbnail FROM USER_HISTORY_TB uh JOIN USER_MEMBER_TB um ON uh.user_id = um.id JOIN SONG_INFO_TB si ON uh.song_id = si.id WHERE uh.user_id = ? ORDER BY uh.created_at DESC;";
