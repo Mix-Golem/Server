@@ -8,6 +8,7 @@ import {
 	saveSocialUser,
 	updateUserWithoutPassword,
 	updateUserWithPassword,
+	getAlNotificationById,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -16,6 +17,7 @@ import { encrypt } from "../middleware/encrypt.js";
 import { createJwt, verify } from "../middleware/jwt.js";
 import { profileUploader } from "./s3.service.js";
 import axios from "axios";
+import { userNoticeResponseDTO } from "../dtos/users.dto.js";
 
 dotenv.config();
 
@@ -260,4 +262,17 @@ export const updateUserInfo = async (token, req) => {
 	user.password = "hidden";
 
 	return createJwt(user);
+};
+
+export const getUserNotice = async (token) => {
+	let uid = verify(token).req.id;
+
+	const data = await getAlNotificationById(uid);
+
+	let responseData = [];
+	for (let i = 0; i < data.length; i++) {
+		responseData.push(userNoticeResponseDTO(data[i]));
+	}
+
+	return responseData;
 };

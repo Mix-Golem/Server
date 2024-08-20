@@ -47,3 +47,15 @@ export const updateUserRequestDTO = (req) => {
 		password: req.password,
 	};
 };
+
+export const userNoticeResponseDTO = (req) => {
+	return {
+		id: req.id,
+		userId: req.user_id,
+		contents: req.content,
+		read: req.read,
+		createdAt: req.created_at,
+		notificationType: req.notification_type,
+		targetId: req.target_id,
+	};
+};

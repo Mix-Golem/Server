@@ -8,6 +8,7 @@ import {
 	updateProfileById,
 	updateUserInfoWithoutPasswordSql,
 	updateUserInfoWithPasswordSql,
+	findUserNoticeByIdSql,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -227,6 +228,24 @@ export const updateUserWithPassword = async (req, uid) => {
 		]);
 
 		return null;
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const getAlNotificationById = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(findUserNoticeByIdSql, [uid]);
+		return result[0];
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);

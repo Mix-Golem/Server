@@ -39,3 +39,6 @@ export const updateUserInfoWithoutPasswordSql =
 
 export const updateUserInfoWithPasswordSql =
 	"UPDATE USER_MEMBER_TB SET name = ?, introduce = ?, password = ? WHERE id = ?";
+
+export const findUserNoticeByIdSql =
+	"SELECT * FROM USER_NOTIFICATION_TB WHERE user_id = ?";

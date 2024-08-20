@@ -11,6 +11,7 @@ import {
 	signupKakao,
 	signupGoogle,
 	updateUser,
+	getNotices,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -61,4 +62,8 @@ usersRoute.post("/info/verify-password", async (req, res) => {
 
 usersRoute.post("/info/update", async (req, res) => {
 	await updateUser(req, res);
+});
+
+usersRoute.get("/notice", async (req, res) => {
+	await getNotices(req, res);
 });

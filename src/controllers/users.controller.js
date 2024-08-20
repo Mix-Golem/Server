@@ -24,6 +24,7 @@ import {
 	signupKakaoService,
 	signupGoogleService,
 	updateUserInfo,
+	getUserNotice,
 } from "../services/users.service.js";
 
 //=================================
@@ -211,6 +212,23 @@ export const updateUser = async (req, res) => {
 			// if token format correct
 			const info = await updateUserInfo(token, updateUserRequestDTO(req.body));
 			res.send(response(status.SUCCESS, info));
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/notice
+export const getNotices = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+		if (token !== null) {
+			// if token format correct
+			res.send(response(status.SUCCESS, await getUserNotice(token)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
