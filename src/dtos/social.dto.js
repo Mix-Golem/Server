@@ -22,3 +22,10 @@ export const followDTO = (req) => {
     followingId: req.followingId,
   };
 };
+
+export const unfollowDTO = (req) => {
+  return {
+    followerId: req.followerId,
+    followingId: req.followingId,
+  };
+};

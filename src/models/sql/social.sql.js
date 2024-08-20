@@ -30,6 +30,18 @@ LIMIT 10;
 `;
 
 export const followQuery = `
-  INSERT INTO USER_FOLLOWLIST_TB (follower_id, following_id, created_at)
-  VALUES (?, ?, NOW())
+  INSERT INT?O USER_FOLLOWLIST_TB (follower_id, following_id, created_at)
+  SELECT ?, ?, NOW()
+  FROM DUAL
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM USER_FOLLOWLIST_TB
+    WHERE follower_id = ? AND following_id = ?
+  );
+`;
+export const unfollowQuery = `
+  DELETE FROM USER_FOLLOWLIST_TB
+  WHERE follower_id = ?
+    AND following_id = ?
+    AND following_id IS NOT NULL;
 `;

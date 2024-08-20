@@ -1,5 +1,5 @@
-import { getTopRankDao, getTodayRankDao, followDAO } from "../models/dao/social.dao.js";
-import { createRankDTO, followDTO, getRankResponseDTO } from "../dtos/social.dto.js";
+import { getTopRankDao, getTodayRankDao, followDAO, unfollowDAO  } from "../models/dao/social.dao.js";
+import { createRankDTO, followDTO, getRankResponseDTO, unfollowDTO } from "../dtos/social.dto.js";
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
 
@@ -49,3 +49,14 @@ export const followService = async (req) => {
     throw error;
   }
 };
+
+export const unfollowService = async (req) => {
+  const { followerId, followingId } = unfollowDTO(req);
+  try {
+    return await unfollowDAO(followerId, followingId);
+  } catch (error) {
+    console.error(error);
+    throw error; 
+  }
+};
+

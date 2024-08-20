@@ -1,8 +1,8 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import { followDTO } from "../dtos/social.dto.js";
-import { getSocial, followService } from "../services/social.service.js";
+import { followDTO, unfollowDTO } from "../dtos/social.dto.js";
+import { getSocial, followService, unfollowService } from "../services/social.service.js";
 
 export const rank = async (req, res) => {
   try {
@@ -29,6 +29,19 @@ export const follow = async (req, res) => {
       res.send(response(status.BAD_REQUEST,null))
     }
     
+  } catch (error) {
+    console.log(error);
+    res.send(response(BaseError));
+  }
+}
+
+export const unfollow = async (req, res) => {
+  try {
+        if (await unfollowService(req)) {
+          res.send(response(status.SUCCESS, null));
+        } else {
+          res.send(response(status.BAD_REQUEST, null));
+        }
   } catch (error) {
     console.log(error);
     res.send(response(BaseError));
