@@ -5,7 +5,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql } from "../sql/music.sql.js";
+import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL, findUserIdfromSongSQL, findNamefromUserId, insertAlarmSQL } from "../sql/music.sql.js";
 
 // music 생성하는 DAO
 export const insertMusicDAO=async(data)=>{
@@ -69,14 +69,93 @@ export const musicInfoDAO = async (songId) => {
     }
 };
 
-// music 삭제하는 DAO
-// export const deleteMusicDAO = async (songId) =>{
-//     try {
-//         const conn = await pool.getConnection();
-//         await pool.query(deleteMusicSql, [songId]);
-//         conn.release;
-//     }catch (error){
-//         console.error(error);
-//         throw new BaseError(status.PARAMETER_IS_WRONG);
-//     }
-// };
+//좋아요 관련 DAO
+
+export const insertFavoriteDAO = async (req) => {
+    try {
+        console.log(req);
+        const conn = await pool.getConnection();
+        const like =await pool.query(insertLikeSQL, [req.userId,req.songId,req.createdAt]);
+        conn.release();
+        return "success";
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const deleteFavoriteDAO = async (req)=>{
+    try {
+        const conn= await pool.getConnection();
+        const like = await pool.query(deleteLikeSQL,[req.userId,req.songId]);
+        conn.release();
+        return "success";
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const isFavoriteDAO = async(req)=>{
+    try{
+        console.log(req);
+        const conn= await pool.getConnection();
+        const [rows] = await pool.query(isLikeSQL,[req.userId,req.songId]);
+        console.log("찾기 여부",rows[0].success);
+        conn.release();
+
+        const isLike = rows[0].success;
+        if(isLike===1){
+            return false
+        }else{
+            return true
+        }
+        
+    }catch(error){
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+
+export const findUserIdDAO = async(req)=>{
+    try {
+        const conn = await pool.getConnection();
+        const [userId] = await pool.query(findUserIdfromSongSQL,[req.songId]);
+        console.log("해당 유저 id",userId[0]);
+        conn.release();
+
+        return userId[0].user_id;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const findNamefromUserIdDAO = async(req)=>{
+    try {
+        const conn = await pool.getConnection();
+        const [name] = await pool.query(findNamefromUserId,[req.userId]);
+        console.log("누른 유저 이름",name[0].name);
+        conn.release();
+
+        return name[0].name;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const insertAlarmDAO =async(req)=>{
+    try {
+        const conn = await pool.getConnection();
+        const name = await pool.query(insertAlarmSQL,[req.userId,req.content,req.createdAt,'LIKE',req.targetId]);
+        
+        conn.release();
+
+        return "success";
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}

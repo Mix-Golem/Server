@@ -10,6 +10,16 @@ export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) valu
 
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
 
-export const musicInfoSql = "SELECT si.id AS song_id,si.user_id AS user_id,si.title AS title,si.about AS description,si.created_at AS created_at,si.media AS media_url,si.public AS is_public,si.thumbnail AS thumbnail_url,si.prompt AS prompt_description FROM SONG_INFO_TB si WHERE si.id = ?;"
+export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
 
-// export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
+export const insertLikeSQL ="insert INTO SONG_FAVORITE_TB(user_id,song_id,created_at) values (?,?,?);";
+
+export const deleteLikeSQL = "delete from SONG_FAVORITE_TB WHERE  user_id =? and song_id =?;";
+
+export const isLikeSQL = "select EXISTS (select * from SONG_FAVORITE_TB where user_id =? and song_id =? limit 1) as success;"
+
+export const findUserIdfromSongSQL ="select SONG_INFO_TB.user_id from SONG_INFO_TB where id=?;"
+
+export const findNamefromUserId ="select name from USER_MEMBER_TB where id=?;"
+
+export const insertAlarmSQL = "insert into USER_NOTIFICATION_TB(user_id, content, `read`, created_at, notification_type, target_user_id) values (?,?,0,?,?,?);";
