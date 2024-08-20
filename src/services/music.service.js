@@ -64,6 +64,10 @@ export const changeinfoMusicService = async (userId, changeData) => {
 export const musicHistoryService = async (userId) => {
     try{
         const historyData = await musicHistoryDAO(userId);
+        const historyDatas = [];
+        for (let i = 0; i < historyData.length; i++) {
+            historyDatas.push(findMusicHistoryResponseDTO(historyDatas[i]));
+        }
         return findMusicHistoryResponseDTO(historyData);
     } catch {
         console.error(error);

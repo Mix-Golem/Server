@@ -116,8 +116,10 @@ export const updateSongInfoDAO = async(changeData) => {
 // 노래 히스토리 가져와주는 DAO
 export const musicHistoryDAO = async (userId) => {
     try {
+        console.log("히스토리!");
         const conn = await pool.getConnection();
         const [rows] = await pool.query(findmusicHistorySql, [userId]);
+        console.log(rows[0])
         conn.release();
         return rows[0];
     } catch (error) {
