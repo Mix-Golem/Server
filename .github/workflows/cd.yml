@@ -50,6 +50,14 @@ jobs:
             --build-arg DB_USER="${{secrets.DB_USER}}" \
             --build-arg DB_PORT="${{secrets.DB_PORT}}" \
             --build-arg DB_PASSWORD="${{secrets.DB_PASSWORD}}" \
+            --buuld-arg EMAIL_USER="${{secrets.EMAIL_USER}}" \
+            --buuld-arg EMAIL_PASS="${{secrets.EMAIL_PASS}}" \
+            --buuld-arg USER_PASS_SALT="${{secrets.USER_PASS_SALT}}" \
+            --buuld-arg JWT_SECRET="${{secrets.JWT_SECRET}}" \
+            --buuld-arg KAKAO_REST_API_KEY="${{secrets.KAKAO_REST_API_KEY}}" \
+            --buuld-arg GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}" \
+            --buuld-arg GOOGLE_CLIENT_PASSWORD="${{secrets.GOOGLE_CLIENT_PASSWORD}}" \
+            --buuld-arg AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE="${{secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE}}" \
             -t ${{ secrets.PROJECT_NAME }} .
 
           docker tag ${{ secrets.PROJECT_NAME }} ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
@@ -73,6 +81,14 @@ jobs:
             echo "export DB_PORT=${{ secrets.DB_PORT }}" >> ~/.bashrc
             echo "export DB_TABLE=${{ secrets.DB_TABLE }}" >> ~/.bashrc
             echo "export DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ~/.bashrc
+            echo "export EMAIL_USER=${{ secrets.EMAIL_USER }}" >> ~/.bashrc
+            echo "export EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> ~/.bashrc
+            echo "export USER_PASS_SALT=${{ secrets.USER_PASS_SALT }}" >> ~/.bashrc
+            echo "export JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ~/.bashrc
+            echo "export KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }}" >> ~/.bashrc
+            echo "export GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> ~/.bashrc
+            echo "export GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD }}" >> ~/.bashrc
+            echo "export AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE }}" >> ~/.bashrc
             
             # 적용된 환경변수 재로드
             source ~/.bashrc
@@ -93,4 +109,12 @@ jobs:
               -e DB_PORT=${{ secrets.DB_PORT }} \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e DB_TABLE=${{ secrets.DB_TABLE}} \
+              -e EMAIL_USER=${{ secrets.EMAIL_USER}} \
+              -e EMAIL_PASS=${{ secrets.EMAIL_PASS}} \
+              -e USER_PASS_SALT=${{ secrets.USER_PASS_SALT}} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET}} \
+              -e KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY}} \
+              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID}} \
+              -e GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD}} \
+              -e AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE}} \
               ${{ secrets.PROJECT_NAME }}
