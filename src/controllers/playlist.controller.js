@@ -30,7 +30,7 @@ export const insertPlaylistController = async (req, res, next) => {
 // 사용자의 모든 플레이리스트 조회 컨트롤러
 export const showUserPlaylistsController = async (req, res, next) => {
     try {
-        const userId = req.userId; // 요청에서 userId를 가져옴
+        const userId = req.userId; // 미들웨어에서 추출된 userId 사용
 
         const playlists = await showUserPlaylistsService(userId);
         res.send(response(status.SUCCESS, playlists));
@@ -39,6 +39,7 @@ export const showUserPlaylistsController = async (req, res, next) => {
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 };
+
 
 // 플레이리스트 삭제 컨트롤러
 export const deletePlaylistController = async (req, res, next) => {
