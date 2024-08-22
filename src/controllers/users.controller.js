@@ -109,6 +109,7 @@ export const signupGoogle = async (req, res) => {
 // /users/login
 export const login = async (req, res) => {
 	try {
+		console.log("f록그인")
 		const result = await loginService(loginRequestDTO(req.body));
 		if (result === 1) {
 			// if login fail by email doesn't exists
