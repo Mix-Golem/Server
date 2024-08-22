@@ -62,14 +62,30 @@ export const playlistInfoDAO = async (playlistId) => {
 export const addSongsToPlaylistDAO = async (playlistId, songs) => {
     try {
         const conn = await pool.getConnection();
-        for (let i = 0; i < songs.length; i++) {
-            const { song_id, order } = songs[i];
-            await pool.query(addSongsToPlaylistSql, [song_id, playlistId, order]);
+
+        // 현재 재생목록에 있는 곡들의 개수를 확인
+        const [rows] = await conn.query(
+            `SELECT COUNT(*) as songCount FROM SONG_PLAYLIST_INFO WHERE playlist_id = ?`,
+            [playlistId]
+        );
+        let currentOrder = rows[0].songCount + 1;
+
+        // 곡을 재생목록에 추가하고, 순서를 마지막에 추가되도록 설정
+        // 곡을 재생목록에 추가하고, 순서를 마지막에 추가되도록 설정
+        for (const song of songs) {
+            const { song_id } = song;
+            await conn.query(
+                `INSERT INTO SONG_PLAYLIST_INFO (playlist_id, song_id, \`order\`)
+                VALUES (?, ?, ?)`,
+                [playlistId, song_id, currentOrder]
+            );
+            currentOrder++;
         }
+
         conn.release();
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.PARAMETER_IS_WRONG);
+        throw new BaseError(status.PARAMETER_IS_WRONG, 'Error adding songs to playlist');
     }
 };
 
