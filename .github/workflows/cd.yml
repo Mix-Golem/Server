@@ -109,6 +109,12 @@ jobs:
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e DB_TABLE=${{ secrets.DB_TABLE }} \
               -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
-              -e EMAIL_PASS=${{ secrets.EMAIL_PASS }} \
+              -e EMAIL_PASS="${{ secrets.EMAIL_PASS }}"" \
+              -e USER_PASS_SALT=${{ secrets.USER_PASS_SALT }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }} \
+              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+              -e GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD }} \
+              -e AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE }} \
               ${{ secrets.PROJECT_NAME }}
-            echo "run success : ${{ secrets.PROJECT_NAME }}"
+            echo "run success : "
