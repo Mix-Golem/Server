@@ -84,8 +84,7 @@ jobs:
 
             source ~/.bashrc
 
-            sudo docker stop mixgolem || true
-            sudo docker rm mixgolem || true
+            
             sudo docker rmi $(docker images -q) || true
             
             # 정확한 이미지 이름과 태그 사용
