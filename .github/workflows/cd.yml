@@ -98,7 +98,7 @@ jobs:
             echo "pull success"
             sudo docker tag jainefer/mixgolem:${GITHUB_SHA::7} mixgolem
             echo "tag success"
-            sudo docker run -d --name mixgolem -p 5000:3000 \
+            sudo docker run -d --name ${{ secrets.PROJECT_NAME }} -p 5000:3000 \
               -e S3_KEYID=${{ secrets.S3_KEYID }} \
               -e S3_PRIVATE_KEY=${{ secrets.S3_PRIVATE_KEY }} \
               -e REGION=${{ secrets.REGION }} \
@@ -116,5 +116,5 @@ jobs:
               -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
               -e GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD }} \
               -e AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE }} \
-              mixgolem
-            echo "run success"
+              ${{ secrets.PROJECT_NAME }}
+            echo "run success : ${{ secrets.PROJECT_NAME }}"
