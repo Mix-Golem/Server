@@ -64,6 +64,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           envs: IMAGE_TAG
           script: |
+            echo "GITHUB_SHA::7 value: ${GITHUB_SHA::7}"
             echo "export S3_KEYID=${{ secrets.S3_KEYID }}" >> ~/.bashrc
             echo "export S3_PRIVATE_KEY=${{ secrets.S3_PRIVATE_KEY }}" >> ~/.bashrc
             echo "export REGION=${{ secrets.REGION }}" >> ~/.bashrc
@@ -84,7 +85,8 @@ jobs:
 
             source ~/.bashrc
 
-            
+            sudo docker stop mixgolem || true
+            sudo docker rm mixgolem || true
             sudo docker rmi $(docker images -q) || true
             
             # 정확한 이미지 이름과 태그 사용
