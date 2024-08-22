@@ -3,7 +3,11 @@
 export const insertPlaylistSql = "INSERT INTO SONG_PLAYLIST_TB (USER_ID, TITLE, CREATED_AT) VALUES (?, ?, ?);";
 
 // 재생목록 삭제 쿼리문
-export const deletePlaylistSql = "DELETE FROM SONG_PLAYLIST_TB WHERE ID = ?;";
+export const deletePlaylistSql = `
+    DELETE FROM SONG_PLAYLIST_TB 
+    WHERE id = ?;
+`;
+
 
 // 자신의 재생목록 모두 불러오기
 export const showUserPlaylistsSql = `
@@ -45,8 +49,14 @@ export const playlistInfoSql = `
 
 // 플레이리스트에 곡 추가하는 sql문
 export const addSongsToPlaylistSql = `
-    INSERT INTO SONG_PLAYLIST_INFO (SONG_ID, PLAYLIST_ID, \`ORDER\`) 
+    INSERT INTO SONG_PLAYLIST_INFO (playlist_id, song_id, \`order\`)
     VALUES (?, ?, ?);
+`;
+
+export const getCurrentMaxOrderSql = `
+    SELECT IFNULL(MAX(\`order\`), 0) as maxOrder
+    FROM SONG_PLAYLIST_INFO
+    WHERE playlist_id = ?;
 `;
 
 // 플레이리스트명 변경하는 SQL문

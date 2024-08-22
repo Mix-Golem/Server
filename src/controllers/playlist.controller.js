@@ -71,9 +71,7 @@ export const playlistInfoController = async (req, res, next) => {
 // 플레이리스트에 곡 추가 Controller
 export const addSongsToPlaylistController = async (req, res, next) => {
     try {
-        const playlistId = req.body.playlistId;
-        const songs = req.body.songs;
-
+        const { playlistId, songs } = req.body;
         await addSongsToPlaylistService(playlistId, songs);
         res.send(response(status.SUCCESS, { message: 'Songs added to playlist successfully' }));
     } catch (error) {
