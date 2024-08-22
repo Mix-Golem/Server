@@ -62,7 +62,7 @@ jobs:
           host: ${{ secrets.EC2_SERVER_HOST }}
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
-          envs: IMAGE_TAG
+          envs: GITHUB_SHA
           script: |
             echo "GITHUB_SHA::7 value: ${GITHUB_SHA::7}"
             echo "export S3_KEYID=${{ secrets.S3_KEYID }}" >> ~/.bashrc
