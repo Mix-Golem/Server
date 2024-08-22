@@ -109,7 +109,7 @@ jobs:
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e DB_TABLE=${{ secrets.DB_TABLE }} \
               -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
-              -e EMAIL_PASS="${{ secrets.EMAIL_PASS }}"" \
+              -e EMAIL_PASS="${{ secrets.EMAIL_PASS }}" \
               -e USER_PASS_SALT=${{ secrets.USER_PASS_SALT }} \
               -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -e KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }} \
