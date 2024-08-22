@@ -28,4 +28,5 @@ sampleRoute.post('/upload', imageUploader.single('sample'), (req, res) => {
 sampleRoute.post('/uploads', async(req,res)=>{
     res.send(response(status.SUCCESS,await s3Uploader(req,res)));
 
-})
+});
+
