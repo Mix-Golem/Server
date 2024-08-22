@@ -85,9 +85,13 @@ jobs:
 
             source ~/.bashrc
 
+            # 기존 컨테이너 및 이미지 삭제
             sudo docker stop mixgolem || true
             sudo docker rm mixgolem || true
-            sudo docker rmi $(docker images -q) || true
+            sudo docker rmi jainefer/mixgolem:${GITHUB_SHA::7} || true
+            
+            # 필요한 경우 모든 이미지를 삭제
+            sudo docker rmi $(docker images -f "dangling=true" -q) || true
             
             # 정확한 이미지 이름과 태그 사용
             sudo docker pull jainefer/mixgolem:${GITHUB_SHA::7}
