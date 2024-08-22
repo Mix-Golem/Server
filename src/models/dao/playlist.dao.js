@@ -90,14 +90,19 @@ export const updateAndReorderSongsDAO = async (playlistId, songId, newOrder) => 
     try {
         const conn = await pool.getConnection();
 
-        // 대상 노래의 순서를 업데이트
+        // 노래 순서 업데이트
         await pool.query(updateSongOrderSql, [newOrder, playlistId, songId]);
 
-        // rownum 초기화
+        // row_num 초기화
         await pool.query("SET @rownum := 0;");
 
         // 모든 노래의 순서를 1부터 다시 정렬
-        await pool.query(reorderSongsSql, [playlistId]);
+        await pool.query(`
+            UPDATE SONG_PLAYLIST_INFO
+            SET \`order\` = (@rownum := @rownum + 1)
+            WHERE playlist_id = ?
+            ORDER BY \`order\`;
+        `, [playlistId]);
 
         conn.release();
     } catch (error) {
