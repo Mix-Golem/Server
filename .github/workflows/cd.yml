@@ -108,5 +108,7 @@ jobs:
               -e DB_PORT=${{ secrets.DB_PORT }} \
               -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -e DB_TABLE=${{ secrets.DB_TABLE }} \
+              -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
+              -e EMAIL_PASS=${{ secrets.EMAIL_PASS }} \
               ${{ secrets.PROJECT_NAME }}
             echo "run success : ${{ secrets.PROJECT_NAME }}"
