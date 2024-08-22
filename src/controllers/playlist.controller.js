@@ -12,7 +12,7 @@ export const insertPlaylistController = async (req, res, next) => {
         // 토큰에서 사용자 ID를 복호화 하기 위해 필요한 코드(필요시 주석 해제)
         // const token = req.headers.authorization.split(' ')[1];
         // const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = 1; // 임시로 고정된 사용자 ID를 사용합니다.
+        const userId = req.userId; // 임시로 고정된 사용자 ID를 사용합니다.
 
         // 요청 데이터를 DTO를 통해 가공
         const requestData = PlaylistInsertRequestDTO(userId, req.body, time);
@@ -30,7 +30,7 @@ export const insertPlaylistController = async (req, res, next) => {
 // 사용자의 모든 플레이리스트 조회 컨트롤러
 export const showUserPlaylistsController = async (req, res, next) => {
     try {
-        const userId = req.params.userId; // 요청에서 userId를 가져옴
+        const userId = req.userId; // 요청에서 userId를 가져옴
 
         const playlists = await showUserPlaylistsService(userId);
         res.send(response(status.SUCCESS, playlists));
@@ -43,7 +43,7 @@ export const showUserPlaylistsController = async (req, res, next) => {
 // 플레이리스트 삭제 컨트롤러
 export const deletePlaylistController = async (req, res, next) => {
     try {
-        const playlistId = req.params.id;
+        const playlistId = req.userId;
 
         // 서비스 함수 호출 -> 플레이리스트 삭제
         await deletePlaylistService(playlistId);
@@ -57,7 +57,7 @@ export const deletePlaylistController = async (req, res, next) => {
 // 플레이리스트 조회 Controller
 export const playlistInfoController = async (req, res, next) => {
     try {
-        const playlistId = req.params.id;
+        const playlistId = req.userId;
 
         const playlistInfo = await playlistInfoService(playlistId);
         res.send(response(status.SUCCESS, playlistInfo));
