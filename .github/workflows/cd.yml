@@ -31,7 +31,13 @@ jobs:
 
       - name: Docker build and push
         run: |
-          IMAGE_TAG=${GITHUB_SHA::7} # 여기서 태그를 설정합니다.
+          # 커밋 SHA의 앞 7자리를 이용하여 유니크한 태그 생성
+          IMAGE_TAG=${GITHUB_SHA::7}
+          # 프로젝트 이름과 태그를 합쳐서 이미지 이름 생성
+          IMAGE_NAME=${{ secrets.PROJECT_NAME }}:${IMAGE_TAG}
+          DOCKER_REPO=${{ secrets.DOCKER_HUB_REPO }}:${IMAGE_TAG}
+          
+          # Docker 이미지 빌드
           docker build \
             --build-arg S3_KEYID="${{secrets.S3_KEYID}}" \
             --build-arg S3_PRIVATE_KEY="${{secrets.S3_PRIVATE_KEY}}" \
@@ -49,10 +55,11 @@ jobs:
             --build-arg GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}" \
             --build-arg GOOGLE_CLIENT_PASSWORD="${{secrets.GOOGLE_CLIENT_PASSWORD}}" \
             --build-arg AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE="${{secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE}}" \
-            -t ${{ secrets.PROJECT_NAME }}:${IMAGE_TAG} .
+            -t $IMAGE_NAME .
 
-          docker tag ${{ secrets.PROJECT_NAME }}:${IMAGE_TAG} ${{ secrets.DOCKER_HUB_REPO }}:${IMAGE_TAG}
-          docker push ${{ secrets.DOCKER_HUB_REPO }}:${IMAGE_TAG}
+          # Docker Hub에 이미지 푸시
+          docker tag $IMAGE_NAME $DOCKER_REPO
+          docker push $DOCKER_REPO
 
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -85,8 +92,8 @@ jobs:
             sudo docker stop ${{ secrets.PROJECT_NAME }} || true
             sudo docker rm ${{ secrets.PROJECT_NAME }} || true
             sudo docker rmi $(docker images -q) || true
-            sudo docker pull ${{ secrets.DOCKER_HUB_REPO }}:${IMAGE_TAG}
-            sudo docker tag ${{ secrets.DOCKER_HUB_REPO }}:${IMAGE_TAG} ${{ secrets.PROJECT_NAME }}
+            sudo docker pull $DOCKER_REPO
+            sudo docker tag $DOCKER_REPO ${{ secrets.PROJECT_NAME }}
             sudo docker run -d --name ${{ secrets.PROJECT_NAME }} -p 5000:3000 \
               -e S3_KEYID=${{ secrets.S3_KEYID }} \
               -e S3_PRIVATE_KEY=${{ secrets.S3_PRIVATE_KEY }} \
