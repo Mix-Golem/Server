@@ -9,6 +9,12 @@ import {
 	updateUserWithoutPassword,
 	updateUserWithPassword,
 	getAlNotificationById,
+	withdrawUser,
+	deletePlaylistByUserId,
+	deleteMusicByUserId,
+	deleteFollowingByUserId,
+	deleteLikeByUserId,
+	deleteHistoryByUserId,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -275,4 +281,21 @@ export const getUserNotice = async (token) => {
 	}
 
 	return responseData;
+};
+
+export const witdhraw = async (token) => {
+	const uid = verify(token).req.id;
+
+	// 1. 회원 비활성화
+	await withdrawUser(uid);
+	// 2. 해당 회원 플레이리스트 전부 삭제
+	await deletePlaylistByUserId(uid);
+	// 3. 해당 회원 음악(가사) 전부 삭제
+	await deleteMusicByUserId(uid);
+	// 4. 해당 회원 팔로우 전부 삭제
+	await deleteFollowingByUserId(uid);
+	// 5. 해당 회원 좋아요 전부 삭제
+	await deleteLikeByUserId(uid);
+	// 6. 히스토리 삭제
+	await deleteHistoryByUserId(uid);
 };
