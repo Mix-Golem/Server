@@ -30,18 +30,54 @@ LIMIT 10;
 `;
 
 export const followQuery = `
-  INSERT INT?O USER_FOLLOWLIST_TB (follower_id, following_id, created_at)
+  INSERT INTO USER_FOLLOWLIST_TB (follower_id, following_id, created_at)
   SELECT ?, ?, NOW()
-  FROM DUAL
-  WHERE NOT EXISTS (
-    SELECT 1
-    FROM USER_FOLLOWLIST_TB
-    WHERE follower_id = ? AND following_id = ?
-  );
 `;
+
+export const checkFollowQuery = `
+  SELECT COUNT(*) as count
+  FROM USER_FOLLOWLIST_TB
+  WHERE follower_id = ? AND following_id = ?
+`;
+
 export const unfollowQuery = `
   DELETE FROM USER_FOLLOWLIST_TB
   WHERE follower_id = ?
     AND following_id = ?
     AND following_id IS NOT NULL;
+`;
+
+export const checkUnfollowQuery = `
+    SELECT COUNT(*) AS count
+    FROM USER_FOLLOWLIST_TB
+    WHERE follower_id = ? AND following_id = ?;
+  `;
+
+
+export const followingListQuery = `
+  SELECT 
+    f.following_id,
+    u2.name AS name,
+    u2.profile AS profile,
+    u2.introduce AS introduce
+  FROM 
+    USER_FOLLOWLIST_TB f
+  JOIN 
+    USER_MEMBER_TB u2 ON f.following_id = u2.id
+  WHERE 
+    f.follower_id = ?;
+`;
+
+export const followerListQuery = `
+  SELECT 
+    f.following_id,
+    u1.name AS name,
+    u1.profile AS profile,
+    u1.introduce AS introduce
+  FROM 
+    USER_FOLLOWLIST_TB f
+  JOIN 
+    USER_MEMBER_TB u1 ON f.follower_id = u1.id
+  WHERE 
+    f.following_id = ?;
 `;

@@ -18,14 +18,20 @@ export const getRankResponseDTO = (data) => {
 
 export const followDTO = (req) => {
   return {
-    followerId: req.followerId,
     followingId: req.followingId,
   };
 };
 
 export const unfollowDTO = (req) => {
   return {
-    followerId: req.followerId,
     followingId: req.followingId,
   };
 };
+
+export const followlistDTO = (req) => {
+  return {
+    id: req.id,
+    profile: req.profile,
+    introduce: req.introduce,
+  }
+}

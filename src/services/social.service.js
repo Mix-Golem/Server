@@ -1,7 +1,17 @@
-import { getTopRankDao, getTodayRankDao, followDAO, unfollowDAO  } from "../models/dao/social.dao.js";
-import { createRankDTO, followDTO, getRankResponseDTO, unfollowDTO } from "../dtos/social.dto.js";
+import {
+  getTopRankDao,
+  getTodayRankDao,
+  followDAO,
+  unfollowDAO,
+  checkFollowDAO,
+  checkUnfollowDAO,
+  followingListDAO,
+  followerListDAO,
+} from "../models/dao/social.dao.js";
+import { createRankDTO, getRankResponseDTO } from "../dtos/social.dto.js";
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
+import { createJwt, verify } from "../middleware/jwt.js";
 
 export const getSocial = async (type) => {
   try {
@@ -39,24 +49,63 @@ export const getSocial = async (type) => {
   }
 };
 
-
-export const followService = async (req) => {
-  const { followerId, followingId } = followDTO(req);
+export const followService = async (token, req) => {
+  const decoded = verify(token).req;
+  const followerId = decoded.id;
+  const { followingId } = req;
   try {
-    return await followDAO(followerId, followingId); 
+    const exists = await checkFollowDAO(followerId, followingId);
+
+    if (exists) {
+      return false;
+    }
+    return await followDAO(followerId, followingId);
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
-export const unfollowService = async (req) => {
-  const { followerId, followingId } = unfollowDTO(req);
+export const unfollowService = async (token, req) => {
+  const decoded = verify(token).req;
+  const followerId = decoded.id;
+  const { followingId } = req;
   try {
+    const exists = await checkUnfollowDAO(followerId, followingId);
+
+    if (!exists) {
+      return false;
+    }
     return await unfollowDAO(followerId, followingId);
   } catch (error) {
     console.error(error);
-    throw error; 
+    throw error;
   }
 };
+export const followlistService = async (token) => {
+  const decoded = verify(token).req;
+  const userId = decoded.id;
 
+  try {
+    const followingList = await followingListDAO(userId);
+    const followerList = await followerListDAO(userId);
+
+    let responseData = [];
+
+    for (let i = 0; i < followingList.length; i++) {
+      responseData.push(followingList[i]);
+    }
+
+    for (let i = 0; i < followerList.length; i++) {
+      responseData.push(followerList[i]);
+    }
+
+    return {
+      followingList: followingList,
+      followerList: followerList
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
