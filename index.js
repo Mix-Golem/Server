@@ -1,17 +1,22 @@
 // index.js
-import express from "express";
 
-import dotenv from "dotenv";
-import cors from "cors";
-import session from "express-session";
+import express from 'express';
 
-import { response } from "./config/response.js";
-import { BaseError } from "./config/error.js";
-import { status } from "./config/response.status.js";
-import { sampleRoute } from "./src/routes/sample.route.js";
+
+import dotenv from 'dotenv';
+import cors from 'cors';
+import session from 'express-session';
+
+import { response } from './config/response.js';
+import { BaseError } from './config/error.js';
+import { status } from './config/response.status.js';
+import {sampleRoute} from './src/routes/sample.route.js';
 import { usersRoute } from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
+import { musicRoute } from './src/routes/music.route.js';
+
 import { imageUploader } from './config/s3.config.js';
+
 
 
 
@@ -51,7 +56,7 @@ app.get("/", (req, res) => {
 
 //route 추가하는 칸
 app.use('/sample',sampleRoute);
-
+app.use('/music',musicRoute);
 
 app.get('/', (req, res) => {
     res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });
@@ -75,6 +80,8 @@ app.use((err, req, res, next) => {
     res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
 });
 
-app.listen(app.get("port"), () => {
-	console.log(`Example app listening on port ${app.get("port")}`);
+//sample
+app.listen(app.get('port'), () => {
+    console.log(`Example app listening on port ${app.get('port')}`);
+
 });
