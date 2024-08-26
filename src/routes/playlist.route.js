@@ -28,7 +28,7 @@ playlistRoute.post('/add-songs', async (req, res) => {
 });
 
 // 유저의 플레이리스트 전부 보여주기
-playlistRoute.get('user/playlists', async (req, res) => {
+playlistRoute.get('/user/playlists', async (req, res) => {
     await showUserPlaylistsController(req, res);
 });
 
