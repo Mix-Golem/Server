@@ -42,3 +42,33 @@ export const updateUserInfoWithPasswordSql =
 
 export const findUserNoticeByIdSql =
 	"SELECT * FROM USER_NOTIFICATION_TB WHERE user_id = ?";
+
+export const withdrawByUserIdSql =
+	"UPDATE USER_MEMBER_TB SET withdraw_at = ?, withdraw_status = ? WHERE id = ?";
+
+export const deletePlaylistByUserIdSql =
+	"DELETE FROM SONG_PLAYLIST_TB WHERE user_id = ?";
+
+export const findMusicIdByUserIdSql =
+	"SELECT id FROM SONG_INFO_TB WHERE user_id = ?";
+
+export const deleteMusicByUserIdSql =
+	"DELETE FROM SONG_INFO_TB WHERE user_id = ?";
+
+export const deleteMusicLinkBySongIdSql =
+	"DELETE FROM SONG_PLAYLIST_INFO WHERE song_id = ?";
+
+export const deleteLyricsBySongIdSql =
+	"DELETE FROM SONG_LYRIC_TB WHERE song_id = ?";
+
+export const deleteFollowByUserIdSql =
+	"DELETE FROM USER_FOLLOWLIST_TB WHERE follower_id = ?";
+
+export const deleteFollowingByUserIdSql =
+	"DELETE FROM USER_FOLLOWLIST_TB WHERE following_id = ?";
+
+export const deleteLikeByUserIdSql =
+	"DELETE FROM SONG_FAVORITE_TB WHERE user_id = ?";
+
+export const deleteHistoryByUserIdSql =
+	"DELETE FROM USER_HISTORY_TB WHERE user_id = ?";

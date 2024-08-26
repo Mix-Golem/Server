@@ -9,6 +9,16 @@ import {
 	updateUserInfoWithoutPasswordSql,
 	updateUserInfoWithPasswordSql,
 	findUserNoticeByIdSql,
+	withdrawByUserIdSql,
+	deletePlaylistByUserIdSql,
+	findMusicIdByUserIdSql,
+	deleteMusicByUserIdSql,
+	deleteMusicLinkBySongIdSql,
+	deleteLyricsBySongIdSql,
+	deleteFollowByUserIdSql,
+	deleteFollowingByUserIdSql,
+	deleteLikeByUserIdSql,
+	deleteHistoryByUserIdSql,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -245,6 +255,132 @@ export const getAlNotificationById = async (uid) => {
 		conn = await pool.getConnection();
 
 		const result = await pool.query(findUserNoticeByIdSql, [uid]);
+		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const withdrawUser = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(withdrawByUserIdSql, [
+			new Date(),
+			true,
+			uid,
+		]);
+		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const deletePlaylistByUserId = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(deletePlaylistByUserIdSql, [uid]);
+		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const deleteMusicByUserId = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const musicIds = await pool.query(findMusicIdByUserIdSql, [uid]);
+
+		console.log(musicIds[0]);
+
+		for (let i = 0; i < musicIds[0].length; i++) {
+			console.log("called");
+			await pool.query(deleteMusicLinkBySongIdSql, [musicIds[0][i].id]);
+			await pool.query(deleteLyricsBySongIdSql, [musicIds[0][i].id]);
+		}
+
+		await pool.query(deleteMusicByUserIdSql, [uid]);
+
+		return musicIds[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const deleteFollowingByUserId = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(deleteFollowByUserIdSql, [uid]);
+		await pool.query(deleteFollowingByUserIdSql, [uid]);
+		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const deleteLikeByUserId = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(deleteLikeByUserIdSql, [uid]);
+
+		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const deleteHistoryByUserId = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(deleteHistoryByUserIdSql, [uid]);
+
 		return result[0];
 	} catch (err) {
 		console.error(err);

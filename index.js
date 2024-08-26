@@ -11,6 +11,10 @@ import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
 
+import {playlistRoute} from "./src/routes/playlist.route";
+
+
+
 import { socialRoute } from './src/routes/social.route.js';
 
 import {sampleRoute} from './src/routes/sample.route.js';
@@ -58,12 +62,15 @@ app.get("/", (req, res) => {
 	});
 });
 
-//route 추가하는 칸
+
+app.use('/music/playlist', playlistRoute);
+
 
 app.use('/sample', sampleRoute);
 app.use('/social', socialRoute);
 
 app.use('/music',musicRoute);
+
 
 
 app.get('/', (req, res) => {

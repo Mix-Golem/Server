@@ -93,7 +93,7 @@ export const followlist = async (req, res) => {
 	}
 };
 
-//검색 기능 컨트롤러
+//검색 기능 컨트롤러 
 export const search = async (req, res) => {
 	try {
 		const keyword = req.query.keyword;
