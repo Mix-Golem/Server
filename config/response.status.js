@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 
 export const status = {
+
   // success
   SUCCESS: {
     status: StatusCodes.OK,
@@ -156,4 +157,5 @@ export const status = {
     code: "VIDEO4003",
     message: "카테고리에 포함된 영상을 찾지 못했습니다.",
   },
+
 };
