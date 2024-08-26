@@ -58,7 +58,7 @@ export const deletePlaylistController = async (req, res, next) => {
 // 플레이리스트 조회 Controller
 export const playlistInfoController = async (req, res, next) => {
     try {
-        const playlistId = req.userId;
+        const playlistId = req.params.id;
 
         const playlistInfo = await playlistInfoService(playlistId);
         res.send(response(status.SUCCESS, playlistInfo));
