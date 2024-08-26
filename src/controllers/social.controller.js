@@ -2,9 +2,14 @@ import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import { checkFormat } from "../middleware/jwt.js";
-import { followDTO, followlistDTO, unfollowDTO, } from "../dtos/social.dto.js";
 import {
-  getSocial,
+  followDTO,
+  followlistDTO,
+  unfollowDTO,
+  rankDTO,
+} from "../dtos/social.dto.js";
+import {
+  rankService,
   followService,
   unfollowService,
   followlistService,
@@ -13,16 +18,15 @@ import {
 export const rank = async (req, res) => {
   try {
     const { rank } = req.params;
-    let result;
     if (rank === "top" || rank === "today") {
-      result = await getSocial(rank);
+      const result = await rankService(rank,rankDTO(req));
+      res.send(response(status.SUCCESS, result));
     } else {
-      return res;
+      res.send(response(status.PARAMETER_IS_WRONG, null));
     }
-    res.send(result);
   } catch (error) {
-    console.error(error);
-    res.status(500).send(response(status.INTERNAL_SERVER_ERROR, error.message));
+    console.log(error);
+    res.send(response(BaseError));
   }
 };
 

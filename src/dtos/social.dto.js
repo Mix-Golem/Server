@@ -1,18 +1,10 @@
-export const createRankDTO = (id, userId, thumbnail, title, userName) => {
+export const rankDTO = (req) => {
   return {
-    id,
-    userId,
-    thumbnail,
-    title,
-    userName,
-  };
-};
-
-export const getRankResponseDTO = (data) => {
-  return {
-    result: {
-      songs: data,
-    },
+    id: req.id,
+    userId: req.userId,
+    thumbnail: req.thumbnail,
+    title: req.title,
+    userName: req.userName,
   };
 };
 

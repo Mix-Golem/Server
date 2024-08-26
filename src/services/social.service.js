@@ -8,41 +8,29 @@ import {
   followingListDAO,
   followerListDAO,
 } from "../models/dao/social.dao.js";
-import { createRankDTO, getRankResponseDTO } from "../dtos/social.dto.js";
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import { createJwt, verify } from "../middleware/jwt.js";
+import { verify } from "../middleware/jwt.js";
+import { rankDTO } from "../dtos/social.dto.js";
 
-export const getSocial = async (type) => {
+export const rankService = async (type, req) => {
   try {
-    let data;
+    let responseData = [];
     if (type === "top") {
-      const songInfo = await getTopRankDao();
-      data = songInfo.map((item) =>
-        createRankDTO(
-          item.user_id,
-          item.user_id,
-          item.thumbnail,
-          item.title,
-          item.userName || "Unknown"
-        )
-      );
+      const topRanklist = await getTopRankDao(rankDTO(req));
+      for (let i = 0; i < topRanklist.length; i++) {
+        responseData.push(topRanklist[i]);
+      }
+      return { topsongs: topRanklist };
     } else if (type === "today") {
-      const songInfo = await getTodayRankDao();
-      data = songInfo.map((item) =>
-        createRankDTO(
-          item.user_id,
-          item.user_id,
-          item.thumbnail,
-          item.title,
-          item.userName || "Unknown"
-        )
-      );
+      const todayRanklist = await getTodayRankDao(rankDTO(req));
+      for (let i = 0; i < todayRanklist.length; i++) {
+        responseData.push(todayRanklist[i]);
+      }
+      return { todaysongs: todayRanklist };
     } else {
-      throw new BaseError(status.BAD_REQUEST, "Invalid rank type");
+      throw new BaseError(status.BAD_REQUEST, null);
     }
-
-    return getRankResponseDTO(data);
   } catch (error) {
     console.error("Service error:", error);
     throw new BaseError(status.INTERNAL_SERVER_ERROR, error.message);
@@ -102,7 +90,7 @@ export const followlistService = async (token) => {
 
     return {
       followingList: followingList,
-      followerList: followerList
+      followerList: followerList,
     };
   } catch (error) {
     console.error(error);
