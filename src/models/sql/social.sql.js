@@ -99,3 +99,22 @@ WHERE
 GROUP BY
     s.id, s.user_id, s.thumbnail, s.title, u.name;
 `;
+
+export const getPopularSql = `
+SELECT
+    um.id AS id,
+    um.name AS userName,
+    um.profile AS profile,
+    COUNT(sf.id) AS total_likes
+FROM 
+    USER_MEMBER_TB um
+JOIN
+    SONG_INFO_TB si ON um.id = si.user_id
+LEFT JOIN
+    SONG_FAVORITE_TB sf ON si.id = sf.song_id
+GROUP BY
+    um.id, um.name, um.profile
+ORDER BY
+    total_likes DESC
+LIMIT 10;
+`;
