@@ -10,12 +10,16 @@ import session from 'express-session';
 import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
+
+import { socialRoute } from './src/routes/social.route.js';
+
 import {sampleRoute} from './src/routes/sample.route.js';
 import { usersRoute } from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
 import { musicRoute } from './src/routes/music.route.js';
 
 import { imageUploader } from './config/s3.config.js';
+
 
 
 
@@ -55,8 +59,12 @@ app.get("/", (req, res) => {
 });
 
 //route 추가하는 칸
-app.use('/sample',sampleRoute);
+
+app.use('/sample', sampleRoute);
+app.use('/social', socialRoute);
+
 app.use('/music',musicRoute);
+
 
 app.get('/', (req, res) => {
     res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });
