@@ -25,6 +25,7 @@ import {
 	signupGoogleService,
 	updateUserInfo,
 	getUserNotice,
+	witdhraw,
 } from "../services/users.service.js";
 
 //=================================
@@ -230,6 +231,23 @@ export const getNotices = async (req, res) => {
 		if (token !== null) {
 			// if token format correct
 			res.send(response(status.SUCCESS, await getUserNotice(token)));
+		} else {
+			// if token format incorrect
+			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+		}
+	} catch (err) {
+		console.log(err);
+		res.send(response(BaseError));
+	}
+};
+
+// /users/withdraw
+export const withdrawUser = async (req, res) => {
+	try {
+		const token = await checkFormat(req.get("Authorization"));
+		if (token !== null) {
+			// if token format correct
+			res.send(response(status.SUCCESS, await witdhraw(token)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

@@ -12,6 +12,7 @@ import {
 	signupGoogle,
 	updateUser,
 	getNotices,
+	withdrawUser,
 } from "../controllers/users.controller";
 
 export const usersRoute = express.Router();
@@ -66,4 +67,8 @@ usersRoute.post("/info/update", async (req, res) => {
 
 usersRoute.get("/notice", async (req, res) => {
 	await getNotices(req, res);
+});
+
+usersRoute.delete("/withdraw", async (req, res) => {
+	await withdrawUser(req, res);
 });
