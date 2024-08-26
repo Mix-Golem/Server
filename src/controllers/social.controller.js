@@ -97,7 +97,7 @@ export const search = async (req, res) => {
   try {
     const keyword = req.query.keyword;
     console.log(keyword);
-    if (keyword !== null || keyword !== undefined) {
+    if (keyword!="") {
       const result = await searchService(keyword);
       if (result === false) {
         res.send(response(status.VIDEO_NOT_FOUND, null));
@@ -105,7 +105,7 @@ export const search = async (req, res) => {
         res.send(response(status.SUCCESS, result));
       }
     } else {
-      throw response(status.PARAMETER_IS_WRONG, null);
+      res.send(response(status.SUCCESS, ""));
     }
   } catch (error) {
     console.log(error);
