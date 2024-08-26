@@ -1,5 +1,5 @@
 import express from "express";
-import { rank, follow, unfollow, followlist } from "../controllers/social.controller";
+import { rank, follow, unfollow, followlist, search } from "../controllers/social.controller";
 export const socialRoute = express.Router();
 
 //랭크 조회하는 라우트
@@ -21,3 +21,8 @@ socialRoute.delete("/follow/unfollow", async (req, res) => {
 socialRoute.get("/info/followlist", async (req, res) => {
   const result = await followlist(req, res);
 });
+
+//소셜 페이지 검색기능 라우트 
+socialRoute.get("/search", async (req, res) => {
+  const result = await search(req, res);
+})

@@ -7,12 +7,14 @@ import {
   checkUnfollowDAO,
   followingListDAO,
   followerListDAO,
+  searchDAO,
 } from "../models/dao/social.dao.js";
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
 import { verify } from "../middleware/jwt.js";
-import { rankDTO } from "../dtos/social.dto.js";
+import { rankDTO, searchDTO } from "../dtos/social.dto.js";
 
+//랭크 서비스
 export const rankService = async (type, req) => {
   try {
     let responseData = [];
@@ -37,6 +39,7 @@ export const rankService = async (type, req) => {
   }
 };
 
+//팔로우 기능 서비스
 export const followService = async (token, req) => {
   const decoded = verify(token).req;
   const followerId = decoded.id;
@@ -54,6 +57,7 @@ export const followService = async (token, req) => {
   }
 };
 
+//언팔로우 기능 서비스
 export const unfollowService = async (token, req) => {
   const decoded = verify(token).req;
   const followerId = decoded.id;
@@ -70,6 +74,8 @@ export const unfollowService = async (token, req) => {
     throw error;
   }
 };
+
+//팔로우 리스트 기능 서비스
 export const followlistService = async (token) => {
   const decoded = verify(token).req;
   const userId = decoded.id;
@@ -92,6 +98,23 @@ export const followlistService = async (token) => {
       followingList: followingList,
       followerList: followerList,
     };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+//검색 기능 서비스 로직 결과 있으면 false 반환 아니면 출력
+export const searchService = async (keyword) => {
+  try {
+    const result = await searchDAO(keyword);
+    if (result.length===0) {
+      return false
+    } else {
+      return {
+        songs: result
+      };
+    }
   } catch (error) {
     console.error(error);
     throw error;

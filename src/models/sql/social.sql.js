@@ -53,7 +53,6 @@ export const checkUnfollowQuery = `
     WHERE follower_id = ? AND following_id = ?;
   `;
 
-
 export const followingListQuery = `
   SELECT 
     f.following_id,
@@ -80,4 +79,23 @@ export const followerListQuery = `
     USER_MEMBER_TB u1 ON f.follower_id = u1.id
   WHERE 
     f.following_id = ?;
+`;
+
+export const searchQuery = `
+SELECT DISTINCT
+    s.id AS id,
+    s.user_id AS userId,
+    s.thumbnail AS thumbnail,
+    s.title AS title,
+    u.name AS userName
+FROM
+    SONG_INFO_TB s
+JOIN
+    USER_MEMBER_TB u ON s.user_id = u.id
+LEFT JOIN
+    SONG_LYRIC_TB l ON s.id = l.song_id
+WHERE
+        s.title LIKE ?
+GROUP BY
+    s.id, s.user_id, s.thumbnail, s.title, u.name;
 `;
