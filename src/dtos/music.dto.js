@@ -12,6 +12,50 @@ export const MusicInsertRequestDTO=(userId,data,time)=>{
     }
 }
 
+
+export const findLyricsResponseDTO = (lyric)=>{
+
+    return{
+        startTime:lyric.start_time,
+        endTime:lyric.end_time,
+        content:lyric.lyric
+    }
+}
+
+export const findMusicInfoResponseDTO = (lyrics,favorite,musicData)=>{
+
+    return{
+        id:musicData.id,
+        userId:musicData.userId,
+        userName:musicData.userName,
+        title:musicData.title,
+        about:musicData.about,
+        prompt : musicData.prompt,
+        media : musicData.media,
+        public : musicData.public,
+        thumbnail: musicData.thumbnail,
+        lyrics: lyrics,
+        like : favorite
+
+    }
+}
+
+export const ChangeinfoMusicRequestDTO = (changeData)=>{
+    return{
+        id: changeData.id,
+        title: changeData.title,
+        public: changeData.public
+    }
+}
+
+export const findMusicHistoryResponseDTO = (historyData) =>{
+    return{
+        id:historyData.id,
+        userId:historyData.userId,
+        userName:historyData.userName,
+        title:historyData.title,
+        thumbnail:historyData.thumbnail
+
 export const insertFavoriteRequestDTO = (userId,date,data)=>{
     return {
         userId : userId,
@@ -24,5 +68,6 @@ export const FavoriteRequestDTO = (userId,data)=>{
     return {
         userId : userId,
         songId :  Number(data.songId)
+
     }
 }

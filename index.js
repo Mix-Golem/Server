@@ -11,6 +11,9 @@ import { response } from './config/response.js';
 import { BaseError } from './config/error.js';
 import { status } from './config/response.status.js';
 
+import { sampleRoute } from './src/routes/sample.route.js';
+
+
 import {playlistRoute} from "./src/routes/playlist.route";
 
 
@@ -66,16 +69,17 @@ app.get("/", (req, res) => {
 app.use('/music/playlist', playlistRoute);
 
 
-app.use('/sample', sampleRoute);
+
+
+
 app.use('/social', socialRoute);
 
-app.use('/music',musicRoute);
+
+app.use('/sample', sampleRoute);
+app.use('/music', musicRoute);
 
 
 
-app.get('/', (req, res) => {
-    res.status(200).json({ status: 200, success: true, message: '루트 페이지!' });
-})
 //sample은 업로드할때 쓰는 file key 값 
 
 
