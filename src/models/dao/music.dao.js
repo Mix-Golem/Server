@@ -145,6 +145,7 @@ export const musicHistoryDAO = async (userId) => {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
+}
 
 export const deleteFavoriteDAO = async (req)=>{
     try {

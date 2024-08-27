@@ -7,7 +7,7 @@ import { insertMusicController ,
         changeinfoMusicController,
         getmySong} from "../controllers/music.controller";
 
-import { insertMusicController ,deleteMusicController, changeinfoMusicControler, insertFavoriteController, findFavoriteController, deleteFavoriteController} from "../controllers/music.controller";
+import {  insertFavoriteController, findFavoriteController, deleteFavoriteController} from "../controllers/music.controller";
 
 export const musicRoute= express.Router();
 

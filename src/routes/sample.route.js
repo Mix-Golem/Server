@@ -10,9 +10,7 @@ sampleRoute.get('/sample',async(req,res)=>{
     const result = await findSample(req,res);
 })
 
-sampleRoute.post('/sample',async(req,res)=>{
-    const result =await insertSampe(req,res);
-});
+
 
 //imageUploder.single은 middleWare 함수라 비동기적으로 처리해야함
 sampleRoute.post('/upload', imageUploader.single('sample'), (req, res) => {

@@ -55,6 +55,8 @@ export const findMusicHistoryResponseDTO = (historyData) =>{
         userName:historyData.userName,
         title:historyData.title,
         thumbnail:historyData.thumbnail
+    }
+}
 
 export const insertFavoriteRequestDTO = (userId,date,data)=>{
     return {

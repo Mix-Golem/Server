@@ -4,7 +4,7 @@ import { status } from "../../config/response.status.js";
 import  jwt  from "jsonwebtoken";
 
 
-import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, changeinfoMusicService,musicHistoryService,mySongService} from "../services/music.service.js";
+import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, musicHistoryService,mySongService} from "../services/music.service.js";
 import { MusicInsertRequestDTO ,MusicChangeinfoRequestDTO, insertFavoriteRequestDTO, FavoriteRequestDTO, ChangeinfoMusicRequestDTO} from "../dtos/music.dto.js";
 
 
@@ -47,7 +47,11 @@ export const musicInfoController = async (req, res, next) => {
 
 // music change-info(update) Controller
 export const changeinfoMusicController = async (req, res, next) => {
-     console.log(decoded);
+    try{
+        const token = req.headers.authorization.split(' ')[1];;
+        console.log(token);
+        const decoded = jwt.decode(token);
+        console.log(decoded);
         const userId = decoded.req.id;
         const requestData = ChangeinfoMusicRequestDTO(req.body);
         console.log("컨트롤러 작동",requestData);
