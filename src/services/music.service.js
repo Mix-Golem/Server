@@ -3,8 +3,8 @@ import { BaseError } from "../../config/error.js";
 
 
 import {status} from "../../config/response.status.js"
-import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO,insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
-import { findNamefromUserId, findUserIdfromSongSQL , insertGenreDAO, insertLyricsDAO, insertMusicDAO, musicInfoDAO, musicHistoryDAO, deleteMusicDAO, countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO} from "../models/sql/music.sql.js";
+import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO,insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
+import { findNamefromUserId, findUserIdfromSongSQL , } from "../models/sql/music.sql.js";
 
 
 // music을 생성하는 함수

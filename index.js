@@ -13,14 +13,10 @@ import { status } from './config/response.status.js';
 
 import { sampleRoute } from './src/routes/sample.route.js';
 
-
 import {playlistRoute} from "./src/routes/playlist.route";
-
-
 
 import { socialRoute } from './src/routes/social.route.js';
 
-import {sampleRoute} from './src/routes/sample.route.js';
 import { usersRoute } from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
 import { musicRoute } from './src/routes/music.route.js';
