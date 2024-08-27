@@ -5,7 +5,7 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import { insertGenreSql, insertLyricsSql, insertMusicGenreSql, insertMusicSql, findGenreSql, getGenreSql, findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql } from "../sql/music.sql.js";
+import { insertGenreSql, insertLyricsSql, insertMusicGenreSql, insertMusicSql, findGenreSql, getGenreSql, findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql,findmySongSql} from "../sql/music.sql.js";
 
 // music 생성하는 DAO
 export const insertMusicDAO = async (data) => {
@@ -128,6 +128,20 @@ export const musicHistoryDAO = async (userId) => {
     }
 };
 
+// 나의 노래 가져와주는 DAO
+export const mySongDAO = async (userId) => {
+    try {
+        console.log("나의 음악!");
+        const conn = await pool.getConnection();
+        const [rows] = await pool.query(findmySongSql, [userId]);
+        console.log(rows)
+        conn.release();
+        return rows;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
 // music 삭제하는 DAO
 // export const deleteMusicDAO = async (songId) =>{
 //     try {

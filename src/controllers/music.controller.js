@@ -2,7 +2,7 @@ import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import  jwt  from "jsonwebtoken";
-import { insertMusicService ,musicInfoService, changeinfoMusicService,musicHistoryService} from "../services/music.service.js";
+import { insertMusicService ,musicInfoService, changeinfoMusicService,musicHistoryService,mySongService} from "../services/music.service.js";
 import { MusicInsertRequestDTO, ChangeinfoMusicRequestDTO} from "../dtos/music.dto.js";
 
 

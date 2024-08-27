@@ -1,7 +1,7 @@
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js"
 import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO} from "../dtos/music.dto.js";
-import { insertGenreDAO, insertLyricsDAO, insertMusicDAO, musicInfoDAO, musicHistoryDAO, deleteMusicDAO, countFavoriteDAO, findLyricsDAO, updateSongInfoDAO } from "../models/dao/music.dao.js";
+import { insertGenreDAO, insertLyricsDAO, insertMusicDAO, musicInfoDAO, musicHistoryDAO, deleteMusicDAO, countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO} from "../models/dao/music.dao.js";
 
 // music을 생성하는 함수
 export const insertMusicService = async (data) => {
@@ -69,12 +69,27 @@ export const musicHistoryService = async (userId) => {
             historyDatas.push(findMusicHistoryResponseDTO(historyDatas[i]));
         }
         return findMusicHistoryResponseDTO(historyData);
-    } catch {
+    } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music history');
     }
 }
 
+//music mySong 불러오는 함수
+export const mySongService = async (userId) => {
+    try{
+        const mySongData = await mySongDAO(userId);
+        const result = []
+        for(let i =0; i<mySongData.length;i++){
+            result.push(await musicInfoService(mySongData[i].id));
+        }
+        console.log(result);
+        return result;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music my-song');
+    }
+}
 // music 삭제 함수
 // export const deleteMusicService = async (songId) =>{
 //     try{
