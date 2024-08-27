@@ -28,4 +28,8 @@ sampleRoute.post('/upload', imageUploader.single('sample'), (req, res) => {
 //promise를 통해 함수화 한거
 sampleRoute.post('/uploads', async(req,res)=>{
     res.send(response(status.SUCCESS,await s3Uploader(req,res)));
+
 });
+
+
+

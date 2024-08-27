@@ -10,6 +10,7 @@ export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) valu
 
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
 
+
 // export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
 
 export const findmusicInfoSql ="select SI.id as id ,SI.user_id as userId, UM.name,SI.title,SI.about,SI.prompt,SI.media,SI.public,SI.thumbnail  from SONG_INFO_TB SI join USER_MEMBER_TB UM on SI.user_id = UM.id where SI.id=?;";
@@ -23,3 +24,18 @@ export const updateSongInfoSQL = "UPDATE SONG_INFO_TB SET title = ?, public = ? 
 export const findmusicHistorySql = "SELECT uh.id AS id,um.id AS userId,um.name AS userName,si.title AS title,si.thumbnail AS thumbnail FROM USER_HISTORY_TB uh JOIN USER_MEMBER_TB um ON uh.user_id = um.id JOIN SONG_INFO_TB si ON uh.song_id = si.id WHERE uh.user_id = ? ORDER BY uh.created_at DESC;";
 
 export const findmySongSql = "SELECT id FROM SONG_INFO_TB where user_id=?;"
+
+export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
+
+export const insertLikeSQL ="insert INTO SONG_FAVORITE_TB(user_id,song_id,created_at) values (?,?,?);";
+
+export const deleteLikeSQL = "delete from SONG_FAVORITE_TB WHERE  user_id =? and song_id =?;";
+
+export const isLikeSQL = "select EXISTS (select * from SONG_FAVORITE_TB where user_id =? and song_id =? limit 1) as success;"
+
+export const findUserIdfromSongSQL ="select SONG_INFO_TB.user_id from SONG_INFO_TB where id=?;"
+
+export const findNamefromUserId ="select name from USER_MEMBER_TB where id=?;"
+
+export const insertAlarmSQL = "insert into USER_NOTIFICATION_TB(user_id, content, `read`, created_at, notification_type, target_user_id) values (?,?,0,?,?,?);";
+

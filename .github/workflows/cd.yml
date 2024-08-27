@@ -1,0 +1,120 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types: [closed] # pull_request closed 됐을 경우
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04 # OS 환경
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    # pull_request가 dev 브랜치에 merge 됐을 경우
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build
+        run: |
+          
+          # Docker 이미지 빌드
+          docker build \
+            --build-arg S3_KEYID="${{secrets.S3_KEYID}}" \
+            --build-arg S3_PRIVATE_KEY="${{secrets.S3_PRIVATE_KEY}}" \
+            --build-arg REGION="${{secrets.REGION}}" \
+            --build-arg BUCKET_NAME="${{secrets.BUCKET_NAME}}" \
+            --build-arg DB_HOST="${{secrets.DB_HOST}}" \
+            --build-arg DB_USER="${{secrets.DB_USER}}" \
+            --build-arg DB_PORT="${{secrets.DB_PORT}}" \
+            --build-arg DB_PASSWORD="${{secrets.DB_PASSWORD}}" \
+            --build-arg EMAIL_USER="${{secrets.EMAIL_USER}}" \
+            --build-arg EMAIL_PASS="${{secrets.EMAIL_PASS}}" \
+            --build-arg USER_PASS_SALT="${{secrets.USER_PASS_SALT}}" \
+            --build-arg JWT_SECRET="${{secrets.JWT_SECRET}}" \
+            --build-arg KAKAO_REST_API_KEY="${{secrets.KAKAO_REST_API_KEY}}" \
+            --build-arg GOOGLE_CLIENT_ID="${{secrets.GOOGLE_CLIENT_ID}}" \
+            --build-arg GOOGLE_CLIENT_PASSWORD="${{secrets.GOOGLE_CLIENT_PASSWORD}}" \
+            --build-arg AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE="${{secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE}}" \
+            -t ${{ secrets.PROJECT_NAME }} .
+
+          # Docker Hub에 이미지 푸시
+          docker tag ${{ secrets.PROJECT_NAME }} ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+          docker push ${{ secrets.DOCKER_HUB_REPO }}:${GITHUB_SHA::7}
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_SERVER_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          script: |
+            echo "GITHUB_SHA::7 value: ${GITHUB_SHA::7}"
+            echo "export S3_KEYID=${{ secrets.S3_KEYID }}" >> ~/.bashrc
+            echo "export S3_PRIVATE_KEY=${{ secrets.S3_PRIVATE_KEY }}" >> ~/.bashrc
+            echo "export REGION=${{ secrets.REGION }}" >> ~/.bashrc
+            echo "export BUCKET_NAME=${{ secrets.BUCKET_NAME }}" >> ~/.bashrc
+            echo "export DB_HOST=${{ secrets.DB_HOST }}" >> ~/.bashrc
+            echo "export DB_USER=${{ secrets.DB_USER }}" >> ~/.bashrc
+            echo "export DB_PORT=${{ secrets.DB_PORT }}" >> ~/.bashrc
+            echo "export DB_TABLE=${{ secrets.DB_TABLE }}" >> ~/.bashrc
+            echo "export DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> ~/.bashrc
+            echo "export EMAIL_USER=${{ secrets.EMAIL_USER }}" >> ~/.bashrc
+            echo "export EMAIL_PASS=${{ secrets.EMAIL_PASS }}" >> ~/.bashrc
+            echo "export USER_PASS_SALT=${{ secrets.USER_PASS_SALT }}" >> ~/.bashrc
+            echo "export JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ~/.bashrc
+            echo "export KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }}" >> ~/.bashrc
+            echo "export GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> ~/.bashrc
+            echo "export GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD }}" >> ~/.bashrc
+            echo "export AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE }}" >> ~/.bashrc
+
+            source ~/.bashrc
+
+            # 기존 컨테이너 및 이미지 삭제
+            sudo docker stop mixgolem || true
+            sudo docker rm mixgolem || true
+            sudo docker rmi jainefer/mixgolem:${GITHUB_SHA::7} || true
+            
+            # 필요한 경우 모든 이미지를 삭제
+            sudo docker rmi $(docker images -f "dangling=true" -q) || true
+            
+            # 정확한 이미지 이름과 태그 사용
+            sudo docker pull jainefer/mixgolem:${GITHUB_SHA::7}
+            echo "pull success"
+            sudo docker tag jainefer/mixgolem:${GITHUB_SHA::7} mixgolem
+            echo "tag success"
+            sudo docker run -d --name ${{ secrets.PROJECT_NAME }} -p 5000:3000 \
+              -e S3_KEYID=${{ secrets.S3_KEYID }} \
+              -e S3_PRIVATE_KEY=${{ secrets.S3_PRIVATE_KEY }} \
+              -e REGION=${{ secrets.REGION }} \
+              -e BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
+              -e DB_HOST=${{ secrets.DB_HOST }} \
+              -e DB_USER=${{ secrets.DB_USER }} \
+              -e DB_PORT=${{ secrets.DB_PORT }} \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e DB_TABLE=${{ secrets.DB_TABLE }} \
+              -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
+              -e EMAIL_PASS="${{ secrets.EMAIL_PASS }}" \
+              -e USER_PASS_SALT=${{ secrets.USER_PASS_SALT }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e KAKAO_REST_API_KEY=${{ secrets.KAKAO_REST_API_KEY }} \
+              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+              -e GOOGLE_CLIENT_PASSWORD=${{ secrets.GOOGLE_CLIENT_PASSWORD }} \
+              -e AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE=${{ secrets.AWS_SDK_JS_SUPPRESS_MAINTENANCE_MODE_MESSAGE }} \
+              ${{ secrets.PROJECT_NAME }}
+            echo "run success : "
