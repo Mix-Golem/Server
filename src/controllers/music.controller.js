@@ -4,8 +4,8 @@ import { status } from "../../config/response.status.js";
 import  jwt  from "jsonwebtoken";
 
 
-import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, musicHistoryService,mySongService} from "../services/music.service.js";
-import { MusicInsertRequestDTO ,MusicChangeinfoRequestDTO, insertFavoriteRequestDTO, FavoriteRequestDTO, ChangeinfoMusicRequestDTO} from "../dtos/music.dto.js";
+import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, musicHistoryService,mySongService,deleteMusicService} from "../services/music.service.js";
+import { MusicInsertRequestDTO , insertFavoriteRequestDTO, FavoriteRequestDTO, ChangeinfoMusicRequestDTO} from "../dtos/music.dto.js";
 
 
 
@@ -73,7 +73,7 @@ export const musicHistoryController = async (req, res, next) => {
         const musicHistory = await musicHistoryService(userId);
         console.log("History 컨트롤러 작동", musicHistory);
         res.send(response(status.SUCCESS, musicHistory));
-      } catch (error) {
+        } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
@@ -108,7 +108,7 @@ export const getmySong = async (req,res,next) => {
         const mySong = await mySongService(userId);
         console.log("mySong 컨트롤러 작동", mySong);
         res.send(response(status.SUCCESS, mySong));
-       } catch (error) {
+        } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
@@ -131,10 +131,20 @@ export const deleteFavoriteController = async(req,res,next)=>{
 }
 
 // music 삭제 컨트롤러
-// export const deleteMusicController = async(req,res,next)=>{
-//     try{
-//         const songId = req.params.id;
-
+export const deleteMusicController = async(req,res,next)=>{
+    try{
+        const token = req.headers.authorization.split(' ')[1];;
+        console.log(token);
+        const decoded = jwt.decode(token);
+        console.log(decoded)
+        const userId = decoded.req.id;
+        const deleteMusic = await deleteMusicService(userId, req.body.songId);
+        res.send(response(status.SUCCESS, deleteMusic));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+}
 
 export const findFavoriteController = async(req,res,next)=>{
     try {

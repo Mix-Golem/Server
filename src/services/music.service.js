@@ -3,7 +3,8 @@ import { BaseError } from "../../config/error.js";
 
 
 import {status} from "../../config/response.status.js"
-import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO,insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
+import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
+import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO} from '../dtos/music.dto.js'
 import { findNamefromUserId, findUserIdfromSongSQL , } from "../models/sql/music.sql.js";
 
 
@@ -96,14 +97,14 @@ export const mySongService = async (userId) => {
     }
 }
 // music 삭제 함수
-// export const deleteMusicService = async (songId) =>{
-//     try{
-//         await deleteMusicDAO(songId);
-//     } catch (error) {
-//         console.error(error);
-//         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error delete music');
-//     }
-// };
+export const deleteMusicService = async (userId, songId) =>{
+    try{
+        await deleteMusicDAO(userId, songId);
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error delete music');
+    }
+};
 
 //좋아요 관련 서비스
 
