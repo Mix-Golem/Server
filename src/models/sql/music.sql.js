@@ -25,7 +25,7 @@ export const findmusicHistorySql = "SELECT uh.id AS id,um.id AS userId,um.name A
 
 export const findmySongSql = "SELECT id FROM SONG_INFO_TB where user_id=?;"
 
-export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
+export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE id =? and user_id =?;";
 
 export const insertLikeSQL ="insert INTO SONG_FAVORITE_TB(user_id,song_id,created_at) values (?,?,?);";
 
@@ -39,3 +39,10 @@ export const findNamefromUserId ="select name from USER_MEMBER_TB where id=?;"
 
 export const insertAlarmSQL = "insert into USER_NOTIFICATION_TB(user_id, content, `read`, created_at, notification_type, target_user_id) values (?,?,0,?,?,?);";
 
+export const deleteLyricSql = "DELETE FROM SONG_LYRIC_TB WHERE song_id=?;"
+
+export const deleteLikeSql = "DELETE FROM SONG_FAVORITE_TB WHERE song_id =?;"
+
+export const deletePlaylistSql = "DELETE FROM SONG_PLAYLIST_INFO WHERE song_id =?;"
+
+export const deleteGenreSql ="delete from SONG_GENRE_INFO where song_id=?;";

@@ -6,7 +6,7 @@ import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
 
-import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL, findUserIdfromSongSQL, findNamefromUserId, insertAlarmSQL , findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql,findmySongSql} from "../sql/music.sql.js";
+import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL, findUserIdfromSongSQL, findNamefromUserId, insertAlarmSQL , findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql,findmySongSql,deleteLyricSql,deleteLikeSql,deletePlaylistSql,deleteMusicSql, deleteGenreSql} from "../sql/music.sql.js";
 
 
 // music 생성하는 DAO
@@ -110,7 +110,7 @@ export const updateSongInfoDAO = async(changeData) => {
         ]);
         conn.release();
         return rows[0];
-       } catch (error) {
+        } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
@@ -141,7 +141,7 @@ export const musicHistoryDAO = async (userId) => {
         console.log(rows[0])
         conn.release();
         return rows[0];
-      } catch (error) {
+        } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
@@ -205,7 +205,7 @@ export const mySongDAO = async (userId) => {
         console.log(rows)
         conn.release();
         return rows;
-      } catch (error) {
+        } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
@@ -227,17 +227,23 @@ export const findNamefromUserIdDAO = async(req)=>{
     }
 }
 
-// music 삭제하는 DAO
-// export const deleteMusicDAO = async (songId) =>{
-//     try {
-//         const conn = await pool.getConnection();
-//         await pool.query(deleteMusicSql, [songId]);
-//         conn.release;
-//     }catch (error){
-//         console.error(error);
-//         throw new BaseError(status.PARAMETER_IS_WRONG);
-//     }
-// };
+//music 삭제하는 DAO
+export const deleteMusicDAO = async (userId, songId) =>{
+    try {
+        console.log("노래 id",songId)
+        const conn = await pool.getConnection();
+        const lyrics=await pool.query(deleteLyricSql, [songId]);
+        const likes=await pool.query(deleteLikeSql, [songId]);
+        const playlist= await pool.query(deletePlaylistSql, [songId]);
+        const genre = await pool.query(deleteGenreSql,[songId]);
+        const music=await pool.query(deleteMusicSql, [songId,userId]);
+        
+        conn.release();
+    }catch (error){
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
 
 
 export const insertAlarmDAO =async(req)=>{
