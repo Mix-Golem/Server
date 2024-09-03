@@ -1,7 +1,9 @@
 // service에서 실제 구현해야 하는 로직 구현
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO, addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO, updateAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
+import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO,
+    addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO,
+    updateAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {

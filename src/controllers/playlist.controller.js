@@ -2,7 +2,10 @@
 import { BaseError } from "../../config/error.js";
 import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
-import {insertPlaylistService, deletePlaylistService, playlistInfoService, addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService, updateAndReorderSongsService } from "../services/playlist.service.js";
+import {insertPlaylistService, deletePlaylistService, playlistInfoService,
+    addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService,
+    updateAndReorderSongsService } from "../services/playlist.service.js";
+
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
 // 플레이리스트 생성 Controller
