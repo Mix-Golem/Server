@@ -43,6 +43,9 @@ export const updateUserInfoWithPasswordSql =
 export const findUserNoticeByIdSql =
 	"SELECT * FROM USER_NOTIFICATION_TB WHERE user_id = ?";
 
+export const updateUserNoticeByIdSql =
+	"UPDATE USER_NOTIFICATION_TB SET `read` = true WHERE user_id = ?";
+
 export const withdrawByUserIdSql =
 	"UPDATE USER_MEMBER_TB SET withdraw_at = ?, withdraw_status = ? WHERE id = ?";
 

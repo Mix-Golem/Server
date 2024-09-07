@@ -20,6 +20,7 @@ import {
 	deleteLikeByUserIdSql,
 	deleteHistoryByUserIdSql,
 	findByIdSql,
+	updateUserNoticeByIdSql,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -256,6 +257,7 @@ export const getAlNotificationById = async (uid) => {
 		conn = await pool.getConnection();
 
 		const result = await pool.query(findUserNoticeByIdSql, [uid]);
+		await pool.query(updateUserNoticeByIdSql, [uid]);
 		return result[0];
 	} catch (err) {
 		console.error(err);
