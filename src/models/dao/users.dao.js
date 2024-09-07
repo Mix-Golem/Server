@@ -19,6 +19,7 @@ import {
 	deleteFollowingByUserIdSql,
 	deleteLikeByUserIdSql,
 	deleteHistoryByUserIdSql,
+	findByIdSql,
 } from "../sql/users.sql";
 import { pool } from "../../../config/db.connect";
 
@@ -382,6 +383,25 @@ export const deleteHistoryByUserId = async (uid) => {
 		const result = await pool.query(deleteHistoryByUserIdSql, [uid]);
 
 		return result[0];
+	} catch (err) {
+		console.error(err);
+		throw new BaseError(status.PARAMETER_IS_WRONG);
+	} finally {
+		if (conn) {
+			conn.release();
+		}
+	}
+};
+
+export const findById = async (uid) => {
+	let conn;
+	try {
+		console.log("---------");
+		conn = await pool.getConnection();
+
+		const result = await pool.query(findByIdSql, [uid]);
+
+		return result[0][0];
 	} catch (err) {
 		console.error(err);
 		throw new BaseError(status.PARAMETER_IS_WRONG);

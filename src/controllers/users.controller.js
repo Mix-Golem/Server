@@ -8,7 +8,6 @@ import {
 	checkVerificationRequestDTO,
 	loginRequestDTO,
 	signupRequestDTO,
-	setProfileRequestDTO,
 	verifyPasswordDTO,
 	updateUserRequestDTO,
 } from "../dtos/users.dto.js";
@@ -119,7 +118,11 @@ export const login = async (req, res) => {
 			res.send(response(status.LOGIN_PASSWORD_WRONG, null));
 		} else {
 			// if login success
-			res.send(response(status.SUCCESS, result));
+			if (result == 0) {
+				res.send(response(status.WITHDRAWED_USER, null));
+			} else {
+				res.send(response(status.SUCCESS, result));
+			}
 		}
 	} catch (err) {
 		console.log(err);

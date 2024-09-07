@@ -15,6 +15,7 @@ import {
 	deleteFollowingByUserId,
 	deleteLikeByUserId,
 	deleteHistoryByUserId,
+	findById,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -24,6 +25,7 @@ import { createJwt, verify } from "../middleware/jwt.js";
 import { profileUploader } from "./s3.service.js";
 import axios from "axios";
 import { userNoticeResponseDTO } from "../dtos/users.dto.js";
+import { BaseError } from "../../config/error.js";
 
 dotenv.config();
 
@@ -75,6 +77,19 @@ export const checkVerificationCode = async (req) => {
 	const code = req.code;
 
 	return bcrypt.compareSync(code.toString(), req.cipherCode);
+};
+
+const isWithdrawed = async (token) => {
+	const userId = verify(token).req.id;
+	const user = await findById(userId);
+
+	console.log(user);
+
+	if (user.withdraw_status) {
+		return 0;
+	} else {
+		return token;
+	}
 };
 
 /**
@@ -183,7 +198,8 @@ export const loginService = async (req) => {
 		if (bcrypt.compareSync(req.password, user.password)) {
 			// if password correct - success
 			user.password = "hidden";
-			return createJwt(user);
+			const token = createJwt(user);
+			return isWithdrawed(token);
 		} else {
 			// if password doesn't correct - fail
 			console.log("password incorrect");

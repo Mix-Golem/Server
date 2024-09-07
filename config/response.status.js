@@ -134,6 +134,12 @@ export const status = {
 		code: "SIGNIN4005",
 		message: "유효하지 않은 토큰입니다.",
 	},
+	WITHDRAWED_USER: {
+		status: StatusCodes.BAD_REQUEST,
+		isSuccess: false,
+		code: "SIGNIN4006",
+		message: "탈퇴한 회원입니다.",
+	},
 
 	// paging err
 

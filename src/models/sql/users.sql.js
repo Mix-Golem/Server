@@ -72,3 +72,5 @@ export const deleteLikeByUserIdSql =
 
 export const deleteHistoryByUserIdSql =
 	"DELETE FROM USER_HISTORY_TB WHERE user_id = ?";
+
+export const findByIdSql = "SELECT * FROM USER_MEMBER_TB WHERE id = ?";
