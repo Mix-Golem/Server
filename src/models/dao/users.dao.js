@@ -40,7 +40,7 @@ export const findEmail = async (req) => {
 			return null;
 		} else {
 			console.log(email[0][0].email);
-			return email[0][0].email;
+			return email[0][0];
 		}
 	} catch (err) {
 		console.error(err);

@@ -5,7 +5,7 @@
 /**
  * SQL that find user by email
  */
-export const findEmailSql = "SELECT email FROM USER_MEMBER_TB WHERE email = ?;";
+export const findEmailSql = "SELECT * FROM USER_MEMBER_TB WHERE email = ?;";
 
 /**
  * SQL that insert user data

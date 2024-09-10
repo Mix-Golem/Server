@@ -24,7 +24,7 @@ import {
 	signupGoogleService,
 	updateUserInfo,
 	getUserNotice,
-	witdhraw,
+	withdraw,
 } from "../services/users.service.js";
 
 //=================================
@@ -39,8 +39,11 @@ export const sendEmail = async (req, res) => {
 		if (encryptedCode !== null) {
 			// if email doesn't exists
 			console.log(encryptedCode);
-
-			res.send(response(status.SUCCESS, encryptedCode));
+			if (encryptedCode !== 0) {
+				res.send(response(status.SUCCESS, encryptedCode));
+			} else {
+				res.send(response(status.WITHDRAWED_USER, null));
+			}
 		} else {
 			// if email exists
 			res.send(response(status.EMAIL_ALREADY_EXIST, null));
@@ -249,7 +252,7 @@ export const withdrawUser = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 		if (token !== null) {
 			// if token format correct
-			res.send(response(status.SUCCESS, await witdhraw(token)));
+			res.send(response(status.SUCCESS, await withdraw(token)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

@@ -39,7 +39,11 @@ dotenv.config();
  * @returns encrypted verification code
  */
 export const sendVerificationCode = async (req) => {
-	if (await findEmailAlreadyExists(req)) {
+	const user = await findEmailAlreadyExists(req);
+	if (user.email !== null) {
+		if (user.withdraw_status) {
+			return 0;
+		}
 		// logic of already exists
 		console.log("exists");
 		return null;
@@ -299,7 +303,7 @@ export const getUserNotice = async (token) => {
 	return responseData;
 };
 
-export const witdhraw = async (token) => {
+export const withdraw = async (token) => {
 	const uid = verify(token).req.id;
 
 	// 1. 회원 비활성화
