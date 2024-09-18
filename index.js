@@ -22,6 +22,7 @@ import bodyParser from "body-parser";
 import { musicRoute } from './src/routes/music.route.js';
 
 import { imageUploader } from './config/s3.config.js';
+import { sunoRoute } from './src/routes/suno.route.js';
 
 
 
@@ -74,7 +75,7 @@ app.use('/social', socialRoute);
 app.use('/sample', sampleRoute);
 app.use('/music', musicRoute);
 
-
+app.use('/suno',sunoRoute);
 
 //sample은 업로드할때 쓰는 file key 값 
 
