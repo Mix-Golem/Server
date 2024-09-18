@@ -9,6 +9,7 @@ import { sunoService } from "../services/suno.service.js";
 
 export const sunoController = async (req,res)=>{
     try{
+        console.log("컨틀롤러 실행");
         const token = await checkFormat(req.get("Authorization"));
 
         if(token !== null){
