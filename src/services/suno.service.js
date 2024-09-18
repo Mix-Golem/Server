@@ -7,6 +7,7 @@ const baseUrl= "http://suno.mixgolem.site"
 
 export const sunoService=async (req)=>{
     try{
+        console.log("서비스 실행");
         const url=`${baseUrl}/api/generate`;
         const response = await axios.post(url,{
             "prompt":req.prompt,
