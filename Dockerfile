@@ -1,5 +1,5 @@
 #노드 버젼 설정
-FROM node:22
+FROM node:20.17.0
 #도커가 배포될때 경로
 WORKDIR /app
 #package.json , package-lock.json 복사
