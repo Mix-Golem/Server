@@ -17,7 +17,7 @@ sunoRoute.post('/', async (req, res) => {
     }
 });
 
-sunoRoute.get('/123',async(req,res)=>{
+sunoRoute.post('/123',async(req,res)=>{
     try {
         res.send(response(status.SUCCESS,{"result":"success"}));
 
