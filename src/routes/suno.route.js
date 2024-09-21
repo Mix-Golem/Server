@@ -1,6 +1,7 @@
-import express, { response } from "express";
+import express from "express";
 import { sunoController } from "../controllers/suno.controller";
 import { status } from "../../config/response.status";
+import { response } from "../../config/response";
 
 export const sunoRoute = express.Router();
 
@@ -17,5 +18,12 @@ sunoRoute.post('/', async (req, res) => {
 });
 
 sunoRoute.get('/123',async(req,res)=>{
-    res.send(response(status.SUCCESS,{"result":"success"}));
+    try {
+        res.send(response(status.SUCCESS,{"result":"success"}));
+
+    } catch (error) {
+        console.error("Error in /suno route:", error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+    
 })
