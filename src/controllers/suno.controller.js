@@ -10,14 +10,13 @@ import { sunoService } from "../services/suno.service.js";
 export const sunoController = async (req,res)=>{
     try{
         console.log("컨틀롤러 실행");
-        res.send(response(status.SUCCESS, await sunoService(req.body)));
-        // const token = await checkFormat(req.get("Authorization"));
+        const token = await checkFormat(req.get("Authorization"));
 
-        // if(token !== null){
-        //     res.send(response(status.SUCCESS, await sunoService(req.body)));
-        // }else{
-        //     res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
-        // }
+        if(token !== null){
+            res.send(response(status.SUCCESS, await sunoService(req.body)));
+        }else{
+            res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
+        }
     }catch(err){
         console.error(err);
         res.send(response(BaseError));
