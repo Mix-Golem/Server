@@ -6,5 +6,5 @@ export const sunoRoute = express.Router();
 
 sunoRoute.post('',async(req,res)=>{
     console.log("라우터 실행");
-    await sunoController(req,res);
+    const result= await sunoController(req,res);
 })
