@@ -48,7 +48,7 @@ app.use(bodyParser.json());
 // ================================
 
 app.use("/sample", sampleRoute);
-
+app.use('/suno',sunoRoute);
 // users
 app.use("/users", usersRoute);
 
@@ -72,10 +72,9 @@ app.use('/music/playlist', playlistRoute);
 app.use('/social', socialRoute);
 
 
-app.use('/sample', sampleRoute);
 app.use('/music', musicRoute);
 
-app.use('/suno',sunoRoute);
+
 
 //sample은 업로드할때 쓰는 file key 값 
 
