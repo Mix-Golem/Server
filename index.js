@@ -41,7 +41,7 @@ app.use(bodyParser.json());
 // ================================
 
 app.use("/sample", sampleRoute);
-
+app.use("/suno", sunoRoute);
 // users
 app.use("/users", usersRoute);
 
@@ -73,12 +73,16 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-	// 템플릿 엔진 변수 설정
 	res.locals.message = err.message;
-	// 개발환경이면 에러를 출력하고 아니면 출력하지 않기
 	res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
-	console.error(err);
-	res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
+
+	// 상태 코드가 있으면 사용, 없으면 500으로 설정
+	const statusCode = err.status || status.INTERNAL_SERVER_ERROR;
+	console.error("Error Stack:", err.stack);
+	console.error("Error Data:", err.data);
+	res
+		.status(statusCode)
+		.send(response(err.data || { message: "Internal Server Error" }));
 });
 
 //sample
