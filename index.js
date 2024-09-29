@@ -1,36 +1,29 @@
 // index.js
 
-import express from 'express';
+import express from "express";
 
+import dotenv from "dotenv";
+import cors from "cors";
+import session from "express-session";
 
-import dotenv from 'dotenv';
-import cors from 'cors';
-import session from 'express-session';
+import { response } from "./config/response.js";
+import { BaseError } from "./config/error.js";
+import { status } from "./config/response.status.js";
 
-import { response } from './config/response.js';
-import { BaseError } from './config/error.js';
-import { status } from './config/response.status.js';
+import { sampleRoute } from "./src/routes/sample.route.js";
 
-import { sampleRoute } from './src/routes/sample.route.js';
+import { playlistRoute } from "./src/routes/playlist.route";
 
-import {playlistRoute} from "./src/routes/playlist.route";
-
-import { socialRoute } from './src/routes/social.route.js';
+import { socialRoute } from "./src/routes/social.route.js";
 
 import { usersRoute } from "./src/routes/users.route.js";
 import bodyParser from "body-parser";
-import { musicRoute } from './src/routes/music.route.js';
+import { musicRoute } from "./src/routes/music.route.js";
 
-import { imageUploader } from './config/s3.config.js';
-import { sunoRoute } from './src/routes/suno.route.js';
+import { imageUploader } from "./config/s3.config.js";
+import { sunoRoute } from "./src/routes/suno.route.js";
 
-
-
-
-
-
-
-dotenv.config();    // .env 파일 사용 (환경 변수 관리)
+dotenv.config(); // .env 파일 사용 (환경 변수 관리)
 
 const app = express();
 
@@ -62,24 +55,16 @@ app.get("/", (req, res) => {
 	});
 });
 
+app.use("/music/playlist", playlistRoute);
 
-app.use('/music/playlist', playlistRoute);
+app.use("/social", socialRoute);
 
+app.use("/sample", sampleRoute);
+app.use("/music", musicRoute);
 
+app.use("/suno", sunoRoute);
 
-
-
-app.use('/social', socialRoute);
-
-
-app.use('/sample', sampleRoute);
-app.use('/music', musicRoute);
-
-app.use('/suno',sunoRoute);
-
-//sample은 업로드할때 쓰는 file key 값 
-
-
+//sample은 업로드할때 쓰는 file key 값
 
 // error handling
 app.use((req, res, next) => {
@@ -88,16 +73,15 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    // 템플릿 엔진 변수 설정
-    res.locals.message = err.message;
-    // 개발환경이면 에러를 출력하고 아니면 출력하지 않기
-    res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-    console.error(err);
-    res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
+	// 템플릿 엔진 변수 설정
+	res.locals.message = err.message;
+	// 개발환경이면 에러를 출력하고 아니면 출력하지 않기
+	res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
+	console.error(err);
+	res.status(status.INTERNAL_SERVER_ERROR).send(response(err.data));
 });
 
 //sample
-app.listen(app.get('port'), () => {
-    console.log(`Example app listening on port ${app.get('port')}`);
-
+app.listen(app.get("port"), () => {
+	console.log(`Example app listening on port ${app.get("port")}`);
 });
