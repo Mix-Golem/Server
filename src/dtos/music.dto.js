@@ -22,7 +22,7 @@ export const findLyricsResponseDTO = (lyric)=>{
     }
 }
 
-export const findMusicInfoResponseDTO = (lyrics,favorite,musicData)=>{
+export const findMusicInfoResponseDTO = (lyrics,favorite,artistData,musicData)=>{
 
     return{
         id:musicData.id,
@@ -35,8 +35,8 @@ export const findMusicInfoResponseDTO = (lyrics,favorite,musicData)=>{
         public : musicData.public,
         thumbnail: musicData.thumbnail,
         lyrics: lyrics,
-        like : favorite
-
+        like : favorite,
+        artist : artistData.name,
     }
 }
 

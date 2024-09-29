@@ -71,6 +71,20 @@ export const musicInfoDAO = async (songId) => {
     }
 };
 
+// 아티스트 데이터 찾아오는 DAO
+export const artistInfoDAO = async (userId) => {
+    try {
+        const conn = await pool.getConnection();
+        const [rows] = await pool.query(findNamefromUserId, [userId]);
+        conn.release();
+        console.log(rows);
+        return rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
+
 // 가사 데이터 찾아오는 DAO
 export const findLyricsDAO = async (songId) => {
     try {
