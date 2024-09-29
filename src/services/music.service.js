@@ -3,7 +3,7 @@ import { BaseError } from "../../config/error.js";
 
 
 import {status} from "../../config/response.status.js"
-import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
+import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO,artistInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
 import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO} from '../dtos/music.dto.js'
 import { findNamefromUserId, findUserIdfromSongSQL , } from "../models/sql/music.sql.js";
 
@@ -31,17 +31,18 @@ export const insertMusicService = async (data) => {
 };
 
 // music 조회 함수
-export const musicInfoService = async (songId) => {
+export const musicInfoService = async (userId, songId) => {
     try {
         //곡 전체 데이터
         const musicInfo = await musicInfoDAO(songId);
+        const artistData = await artistInfoDAO(userId);
         const countData = await countFavoriteDAO(songId);
         const lyrics = await findLyricsDAO(songId);
         const lyricsData = [];
         for (let i = 0; i < lyrics.length; i++) {
             lyricsData.push(findLyricsResponseDTO(lyrics[i]));
         }
-        return findMusicInfoResponseDTO(lyricsData, countData, musicInfo);
+        return findMusicInfoResponseDTO(lyricsData, countData, artistData, musicInfo);
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music info');

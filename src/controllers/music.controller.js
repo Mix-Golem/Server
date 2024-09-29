@@ -36,7 +36,7 @@ export const musicInfoController = async (req, res, next) => {
         console.log(decoded);
         const userId = decoded.req.id;
         const songId = req.params.id;
-        const musicInfo = await musicInfoService(songId);
+        const musicInfo = await musicInfoService(userId, songId);
         res.send(response(status.SUCCESS, musicInfo));
     } catch (error) {
         console.error(error);
