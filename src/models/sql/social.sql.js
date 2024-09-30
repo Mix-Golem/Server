@@ -1,5 +1,6 @@
 export const todayRankQuery = `
 SELECT 
+    s.id AS songId,
     u.id AS user_id,
     u.name AS userName,
     s.title,
@@ -15,6 +16,7 @@ LIMIT 10;
 `;
 export const topRankQuery = `
 SELECT 
+    s.id AS songId,
     u.id AS user_id,
     u.name AS userName,
     s.title,
