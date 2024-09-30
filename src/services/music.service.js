@@ -86,6 +86,7 @@ export const musicHistoryService = async (userId) => {
 export const mySongService = async (userId) => {
     try{
         const mySongData = await mySongDAO(userId);
+        // mySongData.push({"id" : 100})
         const result = []
         for(let i =0; i<mySongData.length;i++){
             const temp = await musicInfoService(userId,mySongData[i].id);
