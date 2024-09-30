@@ -88,7 +88,7 @@ export const mySongService = async (userId) => {
         const mySongData = await mySongDAO(userId);
         const result = []
         for(let i =0; i<mySongData.length;i++){
-            result.push(await musicInfoService(mySongData[i].id));
+            result.push(await musicInfoService(userId,mySongData[i].id));
         }
         console.log(result);
         return result;
