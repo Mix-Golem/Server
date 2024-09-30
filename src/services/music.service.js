@@ -45,7 +45,7 @@ export const musicInfoService = async (userId, songId) => {
         return findMusicInfoResponseDTO(lyricsData, countData, artistData, musicInfo);
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music info');
+        return null
     }
 };
 
@@ -86,9 +86,13 @@ export const musicHistoryService = async (userId) => {
 export const mySongService = async (userId) => {
     try{
         const mySongData = await mySongDAO(userId);
+        // mySongData.push({"id" : 100})
         const result = []
         for(let i =0; i<mySongData.length;i++){
-            result.push(await musicInfoService(userId,mySongData[i].id));
+            const temp = await musicInfoService(userId,mySongData[i].id);
+            if(temp!==null){
+                result.push(temp);
+            }
         }
         console.log(result);
         return result;
