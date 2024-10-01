@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import dotenv from "dotenv";
 import path from 'path';
 import jwt from 'jsonwebtoken';
+import axios from "axios";
 
 
 dotenv.config(); 
@@ -15,7 +16,7 @@ AWS.config.update({
 
 const s3= new AWS.S3()
 
-const allowedExtensions = ['.png','jpg','.jpeg','.bmp']
+const allowedExtensions = ['.png','jpg','.jpeg','.bmp','.mp3', '.wav', '.flac', '.m4a']
 
 
 
@@ -36,3 +37,28 @@ export const imageUploader = multer({
     })
 
 })
+
+export const musicUploader=async (url)=>{
+    try {
+        const response = await axios({
+            url,
+            method: 'GET',
+            responseType: 'stream'
+        });
+        const name =url.split('=')[1];
+        console.log("name: "+name);
+        // S3로 스트림 업로드
+        const uploadParams = {
+            Bucket: 'mixgolem',
+            Key: `/music/${name}`,
+            Body: response.data,
+            ContentType: 'audio/mpeg',
+        };
+        const data = await s3.upload(uploadParams).promise();
+        console.log("데이터 위치: "+data.Location);
+        return data.Location;
+    } catch (error) {
+        console.error('Error uploading from URL:', error);
+        res.status(500).send('Error uploading from URL');
+    }
+}
