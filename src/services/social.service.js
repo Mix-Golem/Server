@@ -41,9 +41,7 @@ export const rankService = async (type, req) => {
 };
 
 //팔로우 기능 서비스
-export const followService = async (token, req) => {
-	const decoded = verify(token).req;
-	const followerId = decoded.id;
+export const followService = async (followerId, req) => {
 	const { followingId } = req;
 	try {
 		const exists = await checkFollowDAO(followerId, followingId);
@@ -59,9 +57,7 @@ export const followService = async (token, req) => {
 };
 
 //언팔로우 기능 서비스
-export const unfollowService = async (token, req) => {
-	const decoded = verify(token).req;
-	const followerId = decoded.id;
+export const unfollowService = async (followerId, req) => {
 	const { followingId } = req;
 	try {
 		const exists = await checkUnfollowDAO(followerId, followingId);
