@@ -173,7 +173,7 @@ export const setUserProfile = async (req, res) => {
 		if (token !== null) {
 			// if token format correct
 			const url = await profileUploader(req, res);
-			await setUserProfileImage(token, url);
+			await setUserProfileImage(req.userId, url);
 			res.send(response(status.SUCCESS, null));
 		} else {
 			// if token format incorrect
@@ -192,7 +192,7 @@ export const checkPassword = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 		if (token !== null) {
 			// if token format correct
-			if (await isPasswordCorrect(token, verifyPasswordDTO(req.body))) {
+			if (await isPasswordCorrect(req.userId, verifyPasswordDTO(req.body))) {
 				res.send(response(status.SUCCESS, null));
 			} else {
 				res.send(response(status.LOGIN_PASSWORD_WRONG, null));
@@ -213,7 +213,10 @@ export const updateUser = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 		if (token !== null) {
 			// if token format correct
-			const info = await updateUserInfo(token, updateUserRequestDTO(req.body));
+			const info = await updateUserInfo(
+				req.userId,
+				updateUserRequestDTO(req.body)
+			);
 			res.send(response(status.SUCCESS, info));
 		} else {
 			// if token format incorrect
@@ -231,7 +234,7 @@ export const getNotices = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 		if (token !== null) {
 			// if token format correct
-			res.send(response(status.SUCCESS, await getUserNotice(token)));
+			res.send(response(status.SUCCESS, await getUserNotice(req.userId)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));
@@ -248,7 +251,7 @@ export const withdrawUser = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 		if (token !== null) {
 			// if token format correct
-			res.send(response(status.SUCCESS, await witdhraw(token)));
+			res.send(response(status.SUCCESS, await witdhraw(req.userId)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

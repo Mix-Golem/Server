@@ -225,15 +225,13 @@ export const getUserInfoByUserId = async (uid) => {
  * @param {*} req
  * @returns
  */
-export const setUserProfileImage = async (token, url) => {
-	const uid = verify(token).req.id;
+export const setUserProfileImage = async (uid, url) => {
 	console.log(uid);
 	await updateProfile(uid, url);
 	return;
 };
 
-export const isPasswordCorrect = async (token, req) => {
-	let uid = verify(token).req.id;
+export const isPasswordCorrect = async (uid, req) => {
 	const encryptedPassword = await findPassword(uid);
 
 	if (bcrypt.compareSync(req.password, encryptedPassword)) {
@@ -246,8 +244,8 @@ export const isPasswordCorrect = async (token, req) => {
 	}
 };
 
-export const updateUserInfo = async (token, req) => {
-	let info = verify(token).req;
+export const updateUserInfo = async (uid, req) => {
+	let info = await getUserInfoById(uid);
 
 	if (req.name == null || req.name == undefined) {
 		req.name = info.name;
@@ -272,9 +270,7 @@ export const updateUserInfo = async (token, req) => {
 	return createJwt(user);
 };
 
-export const getUserNotice = async (token) => {
-	let uid = verify(token).req.id;
-
+export const getUserNotice = async (uid) => {
 	const data = await getAlNotificationById(uid);
 
 	let responseData = [];
@@ -285,9 +281,7 @@ export const getUserNotice = async (token) => {
 	return responseData;
 };
 
-export const witdhraw = async (token) => {
-	const uid = verify(token).req.id;
-
+export const witdhraw = async (uid) => {
 	// 1. 회원 비활성화
 	await withdrawUser(uid);
 	// 2. 해당 회원 플레이리스트 전부 삭제
