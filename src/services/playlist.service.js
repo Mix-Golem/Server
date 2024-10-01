@@ -31,6 +31,7 @@ export const deletePlaylistService = async (playlistId) =>{
 export const showUserPlaylistsService = async (userId) => {
     try {
         const playlists = await showUserPlaylistsDAO(userId);
+        console.log("서비스"+ playlists)
         return playlists;
     } catch (error) {
         console.error(error);
