@@ -40,7 +40,7 @@ export const follow = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 
 		if (token !== null) {
-			const result = await followService(token, followDTO(req.body));
+			const result = await followService(req.userId, followDTO(req.body));
 
 			if (result === false) {
 				return res.send(response(status.FOLLOW_ERROR, null));
@@ -62,7 +62,7 @@ export const unfollow = async (req, res) => {
 		const token = await checkFormat(req.get("Authorization"));
 
 		if (token !== null) {
-			const result = await unfollowService(token, unfollowDTO(req.body));
+			const result = await unfollowService(req.userId, unfollowDTO(req.body));
 			if (result === false) {
 				return res.send(response(status.UNFOLLOW_ERROR, null));
 			} else {
