@@ -18,7 +18,7 @@ import {
 	join,
 	loginService,
 	logoutService,
-	getUserInfoByToken,
+	getUserInfoByUserId,
 	setUserProfileImage,
 	isPasswordCorrect,
 	signupKakaoService,
@@ -27,7 +27,7 @@ import {
 	getUserNotice,
 	witdhraw,
 } from "../services/users.service.js";
- 
+
 //=================================
 //             Users
 //=================================
@@ -110,7 +110,7 @@ export const signupGoogle = async (req, res) => {
 // /users/login
 export const login = async (req, res) => {
 	try {
-		console.log("f록그인")
+		console.log("로그인");
 		const result = await loginService(loginRequestDTO(req.body));
 		if (result === 1) {
 			// if login fail by email doesn't exists
@@ -151,10 +151,11 @@ export const logout = async (req, res) => {
 export const getUserinfo = async (req, res) => {
 	try {
 		const token = await checkFormat(req.get("Authorization"));
+		console.log(req.userId);
 
 		if (token !== null) {
 			// if token format correct
-			res.send(response(status.SUCCESS, await getUserInfoByToken(token)));
+			res.send(response(status.SUCCESS, await getUserInfoByUserId(req.userId)));
 		} else {
 			// if token format incorrect
 			res.send(response(status.TOKEN_FORMAT_INCORRECT, null));

@@ -15,6 +15,7 @@ import {
 	deleteFollowingByUserId,
 	deleteLikeByUserId,
 	deleteHistoryByUserId,
+	getUserInfoById,
 } from "../models/dao/users.dao.js";
 import mailSender from "../middleware/email.js";
 import bcrypt from "bcrypt";
@@ -212,8 +213,9 @@ export const logoutService = async (req) => {
  * @param {*} req user's information token
  * @returns user's information
  */
-export const getUserInfoByToken = async (req) => {
-	let info = verify(req).req;
+export const getUserInfoByUserId = async (uid) => {
+	const info = await getUserInfoById(uid);
+	info.password = "hidden";
 	return info;
 };
 
