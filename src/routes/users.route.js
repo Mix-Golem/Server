@@ -1,4 +1,5 @@
 import express from "express";
+import { verify } from "../middleware/jwt";
 import {
 	sendEmail,
 	checkVerification,
@@ -20,6 +21,8 @@ export const usersRoute = express.Router();
 //=================================
 //             Users
 //=================================
+
+usersRoute.use(verify);
 
 usersRoute.get("/signup/email/send-verification-code", async (req, res) => {
 	await sendEmail(req, res);
