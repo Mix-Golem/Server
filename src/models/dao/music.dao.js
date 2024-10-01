@@ -20,14 +20,12 @@ export const insertMusicDAO = async (data) => {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
-
 }
 
 // music 가사 생성하는 DAO
 export const insertLyricsDAO = async (musicId, data) => {
     try {
         const conn = await pool.getConnection();
-
         const lyrics = await pool.query(insertLyricsSql, [musicId, data.lyric, data.startTime, data.endTime]);
         conn.release();
         return lyrics[0].insertId

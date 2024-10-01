@@ -10,7 +10,6 @@ export const insertMusicGenreSql="insert SONG_GENRE_INFO(genre_id, song_id) valu
 
 export const insertGenreSql= "insert SONG_GENRE_TB(type) values (?);";
 
-
 // export const deleteMusicSql = "DELETE FROM SONG_INFO_TB WHERE ID = ?;";
 
 export const findmusicInfoSql ="select SI.id as id ,SI.user_id as userId, UM.name,SI.title,SI.about,SI.prompt,SI.media,SI.public,SI.thumbnail  from SONG_INFO_TB SI join USER_MEMBER_TB UM on SI.user_id = UM.id where SI.id=?;";
@@ -21,7 +20,7 @@ export const countFavoriteSQL ="SELECT song_id, COUNT(*) AS song_count FROM SONG
 
 export const updateSongInfoSQL = "UPDATE SONG_INFO_TB SET title = ?, public = ? WHERE id = ?";
 
-export const findmusicHistorySql = "SELECT uh.id AS id,um.id AS userId,um.name AS userName,si.title AS title,si.thumbnail AS thumbnail FROM USER_HISTORY_TB uh JOIN USER_MEMBER_TB um ON uh.user_id = um.id JOIN SONG_INFO_TB si ON uh.song_id = si.id WHERE uh.user_id = ? ORDER BY uh.created_at DESC;";
+export const findmusicHistorySql = "SELECT id FROM SONG_INFO_TB where user_id=? ORDER BY created_at DESC";
 
 export const findmySongSql = "SELECT id FROM SONG_INFO_TB where user_id=?;"
 
