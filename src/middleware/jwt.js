@@ -11,7 +11,7 @@ export const createJwt = (req) => {
 
 	return token;
 };
-
+//미들웨어 토큰
 export const verify = (req, res, next) => {
     try {
         const authHeader = req.headers['authorization'];
