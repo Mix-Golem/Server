@@ -1,5 +1,5 @@
 import express from "express";
-
+import { verify } from "../middleware/jwt";
 import { insertMusicController ,
         musicInfoController, 
         deleteMusicController,
@@ -10,7 +10,6 @@ import { insertMusicController ,
 import {  insertFavoriteController, findFavoriteController, deleteFavoriteController} from "../controllers/music.controller";
 
 export const musicRoute= express.Router();
-
 // music 생성하기
 musicRoute.post('',async(req,res)=>{
     await insertMusicController(req,res);
