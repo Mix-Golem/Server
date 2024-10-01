@@ -73,9 +73,9 @@ export const musicHistoryService = async (userId) => {
         const historyData = await musicHistoryDAO(userId);
         const historyDatas = [];
         for (let i = 0; i < historyData.length; i++) {
-            historyDatas.push(findMusicHistoryResponseDTO(historyDatas[i]));
+            historyDatas.push(findMusicHistoryResponseDTO(historyData[i]));
         }
-        return findMusicHistoryResponseDTO(historyData);
+        return historyDatas;
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music history');

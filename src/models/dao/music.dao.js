@@ -152,9 +152,9 @@ export const musicHistoryDAO = async (userId) => {
         console.log("히스토리!");
         const conn = await pool.getConnection();
         const [rows] = await pool.query(findmusicHistorySql, [userId]);
-        console.log(rows[0])
+        console.log(rows)
         conn.release();
-        return rows[0];
+        return rows;
         } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
