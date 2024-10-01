@@ -89,7 +89,6 @@ export const insertFavoriteController = async(req,res,next)=>{
         const userId = decoded.req.id
         const date = new Date();
         res.send(response(status.SUCCESS, await insertFavoriteService(insertFavoriteRequestDTO(userId,date,req.body))));
-
     } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));

@@ -71,11 +71,15 @@ export const changeinfoMusicService = async (userId, changeData) => {
 export const musicHistoryService = async (userId) => {
     try{
         const historyData = await musicHistoryDAO(userId);
-        const historyDatas = [];
+        const result = [];
         for (let i = 0; i < historyData.length; i++) {
-            historyDatas.push(findMusicHistoryResponseDTO(historyData[i]));
+            const temp = await(musicInfoService(userId,historyData[i].id));
+            if(temp!==null){
+                result.push(temp);
+            }
         }
-        return historyDatas;
+        console.log(result);
+        return result;
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching music history');
