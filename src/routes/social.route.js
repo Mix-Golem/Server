@@ -7,7 +7,10 @@ import {
 	search,
 	getPopular,
 } from "../controllers/social.controller";
+import { verify } from "../middleware/jwt";
 export const socialRoute = express.Router();
+
+socialRoute.use(verify);
 
 //랭크 조회하는 라우트
 socialRoute.get("/rank/:rank", async (req, res) => {
