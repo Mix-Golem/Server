@@ -2,7 +2,8 @@ import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
 import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql,
-    getCurrentMaxOrderSql,showUserPlaylistsSql, updatePlaylistNameSql, updateSongOrderSql, reorderSongsSql} from "../sql/playlist.sql.js";
+    getCurrentMaxOrderSql,showUserPlaylistsSql, updatePlaylistNameSql,
+    updateSongOrderSql, reorderSongsSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -122,5 +123,22 @@ export const updateAndReorderSongsDAO = async (playlistId, songId, newOrder) => 
     } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG, 'Error updating and reordering songs');
+    }
+};
+
+export const reorderSongsDAO = async (playlistId) => {
+    try {
+        const conn = await pool.getConnection();
+
+        // rownum을 초기화합니다.
+        await conn.query('SET @rownum := 0;');
+
+        // 노래 순서를 재정렬하는 쿼리 실행
+        await conn.query(reorderSongsSql, [playlistId]);
+
+        conn.release();
+    } catch (error) {
+        console.error('Error reordering songs:', error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
     }
 };

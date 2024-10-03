@@ -3,7 +3,7 @@ import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
 import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO,
     addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO,
-    updateAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
+    updateAndReorderSongsDAO, reorderSongsDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -42,11 +42,16 @@ export const showUserPlaylistsService = async (userId) => {
 // 플레이리스트 조회 함수
 export const playlistInfoService = async (playlistId) => {
     try {
+        // 노래의 순서를 1부터 재정렬
+        await reorderSongsDAO(playlistId);
+
+        // 재정렬된 플레이리스트 정보를 가져옴
         const playlistInfo = await playlistInfoDAO(playlistId);
+
         return playlistInfo;
     } catch (error) {
-        console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error fetching playlist info');
+        console.error('Error fetching playlist info:', error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR);
     }
 };
 
@@ -77,5 +82,15 @@ export const updateAndReorderSongsService = async (playlistId, songId, newOrder)
     } catch (error) {
         console.error(error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error updating and reordering songs');
+    }
+};
+
+export const reorderSongsService = async (playlistId) => {
+    try {
+        // 노래 순서 재정렬 DAO 호출
+        await reorderSongsDAO(playlistId);
+    } catch (error) {
+        console.error('Error in reorderSongsService:', error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR);
     }
 };
