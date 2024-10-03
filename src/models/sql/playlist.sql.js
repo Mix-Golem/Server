@@ -14,7 +14,12 @@ export const showUserPlaylistsSql = `
     SELECT 
         sp.id AS playlist_id, 
         sp.title AS playlist_title, 
-        sp.created_at
+        sp.created_at,
+        (SELECT si.thumbnail FROM SONG_PLAYLIST_INFO spi
+         LEFT JOIN SONG_INFO_TB si ON spi.song_id = si.id
+         WHERE spi.playlist_id = sp.id
+         ORDER BY spi.\`order\`
+         LIMIT 1) AS first_song_thumbnail
     FROM SONG_PLAYLIST_TB sp
     WHERE sp.user_id = ?;
 `;
@@ -33,19 +38,33 @@ export const playlistInfoSql = `
     SELECT 
         sp.id AS playlist_id, 
         sp.title AS playlist_title, 
+        (
+            SELECT si.media 
+            FROM SONG_INFO_TB si
+            JOIN SONG_PLAYLIST_INFO spi ON si.id = spi.song_id
+            WHERE spi.playlist_id = sp.id
+            ORDER BY spi.order
+            LIMIT 1
+        ) AS thumbnail,
         JSON_ARRAYAGG(
             JSON_OBJECT(
                 'song_id', si.id, 
                 'song_title', si.title, 
-                'song_order', spi.order
+                'song_order', spi.order,
+                'artist_id', um.id,
+                'artist_name', um.name,
+                'thumbnail', si.media
             )
         ) AS songs
     FROM SONG_PLAYLIST_TB sp
     LEFT JOIN SONG_PLAYLIST_INFO spi ON sp.id = spi.playlist_id
     LEFT JOIN SONG_INFO_TB si ON spi.song_id = si.id
+    LEFT JOIN USER_MEMBER_TB um ON si.user_id = um.id
     WHERE sp.id = ?
     GROUP BY sp.id;
 `;
+
+
 
 // 플레이리스트에 곡 추가하는 sql문
 export const addSongsToPlaylistSql = `
