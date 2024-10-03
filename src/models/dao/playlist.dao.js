@@ -1,7 +1,8 @@
 import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
-import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql, getCurrentMaxOrderSql,showUserPlaylistsSql, updatePlaylistNameSql, reorderSongsSql, updateSongOrderSql} from "../sql/playlist.sql.js";
+import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql,
+    getCurrentMaxOrderSql,showUserPlaylistsSql, updatePlaylistNameSql, updateSongOrderSql, reorderSongsSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -34,6 +35,7 @@ export const deletePlayListDAO = async (playlistID) =>{
 };
 
 // 유저의 플레이리스트 전체 조회 DAO
+// 유저의 플레이리스트 전체 조회 DAO
 export const showUserPlaylistsDAO = async (userId) => {
     try {
         const conn = await pool.getConnection();
@@ -45,6 +47,7 @@ export const showUserPlaylistsDAO = async (userId) => {
         throw new BaseError(status.PARAMETER_IS_WRONG);
     }
 };
+
 
 // 플레이리스트 조회 DAO
 export const playlistInfoDAO = async (playlistId) => {

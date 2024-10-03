@@ -6,7 +6,6 @@ export const playlistRoute = express.Router();
 
 
 // 모든 라우트에 대해 미들웨어 적용(토큰 해석)
-// modified
 //playlistRoute.use(decodeTokenMiddleware);
 playlistRoute.use(verify);
 
