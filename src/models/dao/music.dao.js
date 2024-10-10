@@ -6,7 +6,7 @@ import { pool } from "../../../config/db.connect.js";
 import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
 
-import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL, findUserIdfromSongSQL, findNamefromUserId, insertAlarmSQL , findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql,findmySongSql,deleteLyricSql,deleteLikeSql,deletePlaylistSql,deleteMusicSql, deleteGenreSql} from "../sql/music.sql.js";
+import { insertGenreSql,insertLyricsSql,insertMusicGenreSql,insertMusicSql,findGenreSql,getGenreSql, insertLikeSQL, deleteLikeSQL, isLikeSQL, findUserIdfromSongSQL, findNamefromUserId, insertAlarmSQL , findmusicInfoSql, findLyricsSQL, countFavoriteSQL, updateSongInfoSQL,findmusicHistorySql,findmySongSql,deleteLyricSql,deleteLikeSql,deletePlaylistSql,deleteMusicSql, deleteGenreSql, randomSql} from "../sql/music.sql.js";
 
 
 // music 생성하는 DAO
@@ -228,7 +228,6 @@ export const findNamefromUserIdDAO = async(req)=>{
     try {
         const conn = await pool.getConnection();
         const [name] = await pool.query(findNamefromUserId,[req.userId]);
-        console.log("누른 유저 이름",name[0].name);
         conn.release();
 
         return name[0].name;
@@ -269,5 +268,30 @@ export const insertAlarmDAO =async(req)=>{
     } catch (error) {
         console.error(error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const findRandomDAO = async (req)=>{
+    try {
+        const conn = await pool.getConnection();
+        const [musics] = await pool.query(randomSql);
+        console.log(musics);
+        conn.release();
+        return musics;
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+}
+
+export const findNameOne = async(req)=>{
+    try {
+        const conn = await pool.getConnection();
+        const [name] = await pool.query(findNamefromUserId,[req]);
+        
+        conn.release();
+        return name[0].name;
+    } catch (error) {
+        
     }
 }

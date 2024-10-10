@@ -73,3 +73,14 @@ export const FavoriteRequestDTO = (userId,data)=>{
 
     }
 }
+
+export const randomResponseDTO = (music,artist)=>{
+    return{
+        songId : music.id,
+        userId : music.user_id,
+        title : music.title,
+        artist : artist,
+        thumbnail : music.thumbnail
+    }
+
+}

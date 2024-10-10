@@ -24,6 +24,7 @@ export const verify = (req, res, next) => {
 		"/rank/top",
 		"/search",
 		"/popular",
+		"/music/random"
 	];
 
 	// 현재 요청 URL이 제외할 경로에 포함되는지 확인

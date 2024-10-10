@@ -3,8 +3,8 @@ import { BaseError } from "../../config/error.js";
 
 
 import {status} from "../../config/response.status.js"
-import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO,artistInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO} from "../models/dao/music.dao.js";
-import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO} from '../dtos/music.dto.js'
+import { insertGenreDAO,insertLyricsDAO,insertMusicDAO,deleteMusicDAO, musicInfoDAO,artistInfoDAO, musicHistoryDAO,  countFavoriteDAO, findLyricsDAO, updateSongInfoDAO,mySongDAO,insertFavoriteDAO, deleteFavoriteDAO, isFavoriteDAO, findUserIdDAO, insertAlarmDAO, findNamefromUserIdDAO, findRandomDAO, findNameOne} from "../models/dao/music.dao.js";
+import { findLyricsResponseDTO, findMusicInfoResponseDTO ,findMusicHistoryResponseDTO, randomResponseDTO} from '../dtos/music.dto.js'
 import { findNamefromUserId, findUserIdfromSongSQL , } from "../models/sql/music.sql.js";
 
 
@@ -155,3 +155,21 @@ export const isFavoriteService = async (req)=>{
     }
 
 }
+export const findRandomService = async()=>{
+    try{
+        const musicData = await findRandomDAO();
+        const result =[]
+        for(let i =0; i<musicData.length;i++){
+            const artist = await findNameOne(musicData[i].user_id);
+            
+            result.push(randomResponseDTO(musicData[i],artist));
+        }
+
+       
+
+        return result;
+    } catch(error){
+        console.log(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR);
+    }
+} 
