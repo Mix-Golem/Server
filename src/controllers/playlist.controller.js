@@ -35,6 +35,7 @@ export const showUserPlaylistsController = async (req, res, next) => {
     try {
         const userId = req.userId; // 미들웨어에서 추출된 userId 사용
         console.log(userId);
+        console.log("컨틀롤러");
         const playlists = await showUserPlaylistsService(userId);
         res.send(response(status.SUCCESS, playlists));
     } catch (error) {

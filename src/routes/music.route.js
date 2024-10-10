@@ -5,7 +5,8 @@ import { insertMusicController ,
         deleteMusicController,
         musicHistoryController,
         changeinfoMusicController,
-        getmySong} from "../controllers/music.controller";
+        getmySong,
+        findRandomController} from "../controllers/music.controller";
 
 import {  insertFavoriteController, findFavoriteController, deleteFavoriteController} from "../controllers/music.controller";
 
@@ -51,3 +52,6 @@ musicRoute.get('/like',async(req,res)=>{
     const result = await findFavoriteController(req,res);
 })
 
+musicRoute.get('/random',async(req,res)=>{
+    const reuslt = await findRandomController(req,res);
+})

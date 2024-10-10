@@ -4,7 +4,7 @@ import { status } from "../../config/response.status.js";
 import  jwt  from "jsonwebtoken";
 
 
-import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, musicHistoryService,mySongService,deleteMusicService} from "../services/music.service.js";
+import { insertMusicService ,changeinfoMusicService, insertFavoriteService, deleteFavoriteService, isFavoriteService,musicInfoService, musicHistoryService,mySongService,deleteMusicService, findRandomService} from "../services/music.service.js";
 import { MusicInsertRequestDTO , insertFavoriteRequestDTO, FavoriteRequestDTO, ChangeinfoMusicRequestDTO} from "../dtos/music.dto.js";
 
 
@@ -154,6 +154,15 @@ export const findFavoriteController = async(req,res,next)=>{
         const userId = decoded.req.id
         
         res.send(response(status.SUCCESS, await isFavoriteService(FavoriteRequestDTO(userId,req.query))));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+    }
+}
+
+export const findRandomController = async(req,res,next)=>{
+    try {
+        res.send(response(status.SUCCESS,await findRandomService()));
     } catch (error) {
         console.error(error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));

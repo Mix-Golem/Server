@@ -45,3 +45,5 @@ export const deleteLikeSql = "DELETE FROM SONG_FAVORITE_TB WHERE song_id =?;"
 export const deletePlaylistSql = "DELETE FROM SONG_PLAYLIST_INFO WHERE song_id =?;"
 
 export const deleteGenreSql ="delete from SONG_GENRE_INFO where song_id=?;";
+
+export const randomSql = "select * from SONG_INFO_TB WHERE public=1 ORDER BY RAND() LIMIT 10;"
