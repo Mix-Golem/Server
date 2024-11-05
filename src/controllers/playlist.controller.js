@@ -4,7 +4,7 @@ import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import {insertPlaylistService, deletePlaylistService, playlistInfoService,
     addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService,
-    updateAndReorderSongsService } from "../services/playlist.service.js";
+    updateAndReorderSongsService, deleteAndReorderSongsService } from "../services/playlist.service.js";
 
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
@@ -73,14 +73,17 @@ export const playlistInfoController = async (req, res, next) => {
 };
 
 // 플레이리스트에 곡 추가 Controller
-export const addSongsToPlaylistController = async (req, res, next) => {
+export const addSongsToPlaylistController = async (req, res) => {
     try {
-        const { playlistId, songs } = req.body;
-        await addSongsToPlaylistService(playlistId, songs);
-        res.send(response(status.SUCCESS, { message: 'Songs added to playlist successfully' }));
+        const { playlistId } = req.params;
+        const { songId } = req.body;
+
+        await addSongsToPlaylistService(playlistId, songId);
+
+        res.send(response(status.SUCCESS, "Song added to playlist successfully"));
     } catch (error) {
         console.error(error);
-        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST, 'Error adding song to playlist')));
     }
 };
 
@@ -110,5 +113,19 @@ export const updateAndReorderSongsController = async (req, res, next) => {
     } catch (error) {
         console.error(error);
         res.send(response(status.INTERNAL_SERVER_ERROR, 'Error updating and reordering songs'));
+    }
+};
+
+// 플레이리스트에서 곡 삭제 controller
+export const deleteAndReorderSongsController = async (req, res) => {
+    try {
+        const { playlistId, songId } = req.params;
+
+        await deleteAndReorderSongsService(playlistId, songId);
+
+        res.send(response(status.SUCCESS, "Song deleted and playlist reordered successfully"));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST, 'Error deleting and reordering songs')));
     }
 };

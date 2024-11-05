@@ -39,7 +39,7 @@ export const playlistInfoSql = `
         sp.id AS playlist_id, 
         sp.title AS playlist_title, 
         (
-            SELECT si.media 
+            SELECT si.thumbnail
             FROM SONG_INFO_TB si
             JOIN SONG_PLAYLIST_INFO spi ON si.id = spi.song_id
             WHERE spi.playlist_id = sp.id
@@ -50,25 +50,23 @@ export const playlistInfoSql = `
             JSON_OBJECT(
                 'song_id', si.id, 
                 'song_title', si.title, 
-                'song_order', spi.order,
+                'song_order', spi.order,  
                 'artist_id', um.id,
                 'artist_name', um.name,
-                'thumbnail', si.media
+                'thumbnail', si.thumbnail
             )
         ) AS songs
     FROM SONG_PLAYLIST_TB sp
     LEFT JOIN SONG_PLAYLIST_INFO spi ON sp.id = spi.playlist_id
     LEFT JOIN SONG_INFO_TB si ON spi.song_id = si.id
     LEFT JOIN USER_MEMBER_TB um ON si.user_id = um.id
-    WHERE sp.id = ?
+    WHERE sp.id = ? AND si.id IS NOT NULL
     GROUP BY sp.id;
 `;
 
-
-
 // 플레이리스트에 곡 추가하는 sql문
 export const addSongsToPlaylistSql = `
-    INSERT INTO SONG_PLAYLIST_INFO (playlist_id, song_id, \`order\`)
+   INSERT INTO SONG_PLAYLIST_INFO (playlist_id, song_id, \`order\`)
     VALUES (?, ?, ?);
 `;
 
@@ -97,3 +95,8 @@ export const reorderSongsSql = `
     ORDER BY \`ORDER\`;
 `;
 
+// 플레이리스트 내, 노래 삭제
+export const deleteSongFromPlaylistSql = `
+    DELETE FROM SONG_PLAYLIST_INFO
+    WHERE playlist_id = ? AND song_id = ?;
+`;
