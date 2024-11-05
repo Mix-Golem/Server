@@ -73,14 +73,17 @@ export const playlistInfoController = async (req, res, next) => {
 };
 
 // 플레이리스트에 곡 추가 Controller
-export const addSongsToPlaylistController = async (req, res, next) => {
+export const addSongsToPlaylistController = async (req, res) => {
     try {
-        const { playlistId, songs } = req.body;
-        await addSongsToPlaylistService(playlistId, songs);
-        res.send(response(status.SUCCESS, { message: 'Songs added to playlist successfully' }));
+        const { playlistId } = req.params;
+        const { songId } = req.body;
+
+        await addSongsToPlaylistService(playlistId, songId);
+
+        res.send(response(status.SUCCESS, "Song added to playlist successfully"));
     } catch (error) {
         console.error(error);
-        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST, 'Error adding song to playlist')));
     }
 };
 

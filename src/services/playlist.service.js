@@ -3,7 +3,7 @@ import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
 import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO,
     addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO,
-    updateAndReorderSongsDAO, reorderSongsDAO, deleteAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
+    updateAndReorderSongsDAO, reorderSongsDAO, deleteAndReorderSongsDAO, getCurrentMaxOrderDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -56,12 +56,17 @@ export const playlistInfoService = async (playlistId) => {
 };
 
 // 플레이리스트에 곡 추가 함수
-export const addSongsToPlaylistService = async (playlistId, songs) => {
+export const addSongsToPlaylistService = async (playlistId, songId) => {
     try {
-        await addSongsToPlaylistDAO(playlistId, songs);
+        // 현재 플레이리스트에서 가장 높은 순서를 가져옵니다.
+        const currentMaxOrder = await getCurrentMaxOrderDAO(playlistId);
+        const newOrder = currentMaxOrder + 1; // 마지막 순서보다 1 크게 설정
+
+        // DAO에서 노래를 추가하도록 요청합니다.
+        await addSongsToPlaylistDAO(playlistId, songId, newOrder);
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error adding songs to playlist');
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error adding song to playlist');
     }
 };
 

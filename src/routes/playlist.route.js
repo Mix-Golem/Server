@@ -25,7 +25,7 @@ playlistRoute.get('/:id', async (req, res)=> {
 });
 
 // 플레이리스트 곡 추가 route
-playlistRoute.post('/add-songs', async (req, res) => {
+playlistRoute.post('/:playlistId/songs', async (req, res) => {
     await addSongsToPlaylistController(req, res);
 });
 
