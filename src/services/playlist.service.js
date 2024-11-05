@@ -3,7 +3,7 @@ import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
 import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO,
     addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO,
-    updateAndReorderSongsDAO, reorderSongsDAO} from "../models/dao/playlist.dao.js";
+    updateAndReorderSongsDAO, reorderSongsDAO, deleteAndReorderSongsDAO} from "../models/dao/playlist.dao.js";
 
 // 플레이리스트를 생성하는 함수
 export const insertPlaylistService = async (requestData) => {
@@ -92,5 +92,15 @@ export const reorderSongsService = async (playlistId) => {
     } catch (error) {
         console.error('Error in reorderSongsService:', error);
         throw new BaseError(status.INTERNAL_SERVER_ERROR);
+    }
+};
+
+// 플레이리스트에서 곡 삭제 service
+export const deleteAndReorderSongsService = async (playlistId, songId) => {
+    try {
+        await deleteAndReorderSongsDAO(playlistId, songId);
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error deleting and reordering songs');
     }
 };

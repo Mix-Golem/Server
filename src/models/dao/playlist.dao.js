@@ -3,7 +3,7 @@ import { BaseError } from "../../../config/error.js";
 import { status } from "../../../config/response.status.js";
 import {deletePlaylistSql, insertPlaylistSql, playlistInfoSql, addSongsToPlaylistSql,
     getCurrentMaxOrderSql,showUserPlaylistsSql, updatePlaylistNameSql,
-    updateSongOrderSql, reorderSongsSql} from "../sql/playlist.sql.js";
+    updateSongOrderSql, reorderSongsSql, deleteSongFromPlaylistSql} from "../sql/playlist.sql.js";
 
 // 플레이리스트 삽입 to DB
 export const insertPlaylistDAO = async (data) => {
@@ -126,6 +126,7 @@ export const updateAndReorderSongsDAO = async (playlistId, songId, newOrder) => 
     }
 };
 
+// 플레이리스트 곡 순서 정렬
 export const reorderSongsDAO = async (playlistId) => {
     try {
         const conn = await pool.getConnection();
@@ -140,5 +141,26 @@ export const reorderSongsDAO = async (playlistId) => {
     } catch (error) {
         console.error('Error reordering songs:', error);
         throw new BaseError(status.PARAMETER_IS_WRONG);
+    }
+};
+
+// 플레이리스트에서 곡 삭제 dao
+export const deleteAndReorderSongsDAO = async (playlistId, songId) => {
+    try {
+        const conn = await pool.getConnection();
+
+        // 곡을 삭제
+        await conn.query(deleteSongFromPlaylistSql, [playlistId, songId]);
+
+        // rownum 초기화
+        await conn.query("SET @rownum := 0;");
+
+        // 모든 곡의 순서를 1부터 다시 정렬
+        await conn.query(reorderSongsSql, [playlistId]);
+
+        conn.release();
+    } catch (error) {
+        console.error(error);
+        throw new BaseError(status.PARAMETER_IS_WRONG, 'Error deleting and reordering songs');
     }
 };

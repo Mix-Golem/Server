@@ -98,3 +98,8 @@ export const reorderSongsSql = `
     ORDER BY \`ORDER\`;
 `;
 
+// 플레이리스트 내, 노래 삭제
+export const deleteSongFromPlaylistSql = `
+    DELETE FROM SONG_PLAYLIST_INFO
+    WHERE playlist_id = ? AND song_id = ?;
+`;

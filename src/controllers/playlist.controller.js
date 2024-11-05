@@ -4,7 +4,7 @@ import { response } from "../../config/response.js";
 import { status } from "../../config/response.status.js";
 import {insertPlaylistService, deletePlaylistService, playlistInfoService,
     addSongsToPlaylistService, showUserPlaylistsService, updatePlaylistNameService,
-    updateAndReorderSongsService } from "../services/playlist.service.js";
+    updateAndReorderSongsService, deleteAndReorderSongsService } from "../services/playlist.service.js";
 
 import { PlaylistInsertRequestDTO } from "../dtos/playlist.dto.js";
 
@@ -110,5 +110,19 @@ export const updateAndReorderSongsController = async (req, res, next) => {
     } catch (error) {
         console.error(error);
         res.send(response(status.INTERNAL_SERVER_ERROR, 'Error updating and reordering songs'));
+    }
+};
+
+// 플레이리스트에서 곡 삭제 controller
+export const deleteAndReorderSongsController = async (req, res) => {
+    try {
+        const { playlistId, songId } = req.params;
+
+        await deleteAndReorderSongsService(playlistId, songId);
+
+        res.send(response(status.SUCCESS, "Song deleted and playlist reordered successfully"));
+    } catch (error) {
+        console.error(error);
+        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST, 'Error deleting and reordering songs')));
     }
 };

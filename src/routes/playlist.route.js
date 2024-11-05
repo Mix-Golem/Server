@@ -1,5 +1,5 @@
 import express from "express";
-import { insertPlaylistController, deletePlaylistController, showUserPlaylistsController,playlistInfoController, addSongsToPlaylistController, updatePlaylistNameController, updateAndReorderSongsController} from "../controllers/playlist.controller.js";
+import { insertPlaylistController, deletePlaylistController, showUserPlaylistsController,playlistInfoController, addSongsToPlaylistController, updatePlaylistNameController, updateAndReorderSongsController, deleteAndReorderSongsController} from "../controllers/playlist.controller.js";
 //import { decodeTokenMiddleware } from "../middleware/auth.middleware.js";
 import { verify} from "../middleware/jwt";
 export const playlistRoute = express.Router();
@@ -42,4 +42,9 @@ playlistRoute.put('/:id', async (req, res) => {
 // 플레이리스트 곡 순서 변경
 playlistRoute.put('/:playlistId/song-order', async (req, res) => {
     await updateAndReorderSongsController(req, res);
+});
+
+//플레이리스트 곡 삭제
+playlistRoute.delete("/:playlistId/songs/:songId", async (req, res) => {
+    await deleteAndReorderSongsController(req, res);
 });
