@@ -39,28 +39,31 @@ export const playlistInfoSql = `
         sp.id AS playlist_id, 
         sp.title AS playlist_title, 
         (
-            SELECT si.thumbnail
+            SELECT si.media
             FROM SONG_INFO_TB si
             JOIN SONG_PLAYLIST_INFO spi ON si.id = spi.song_id
             WHERE spi.playlist_id = sp.id
             ORDER BY spi.order
             LIMIT 1
-        ) AS thumbnail,
-        JSON_ARRAYAGG(
-            JSON_OBJECT(
-                'song_id', si.id, 
-                'song_title', si.title, 
-                'song_order', spi.order,  
-                'artist_id', um.id,
-                'artist_name', um.name,
-                'thumbnail', si.thumbnail
+        ) AS thumbnail, -- 첫 번째 곡의 썸네일
+        CASE
+            WHEN COUNT(spi.song_id) = 0 THEN NULL -- 곡이 없을 경우 null
+            ELSE JSON_ARRAYAGG(
+                JSON_OBJECT(
+                    'song_id', si.id, 
+                    'song_title', si.title, 
+                    'song_order', spi.order, 
+                    'artist_id', um.id,
+                    'artist_name', um.name,
+                    'thumbnail', si.media -- 각 곡의 썸네일
+                )
             )
-        ) AS songs
+        END AS songs
     FROM SONG_PLAYLIST_TB sp
     LEFT JOIN SONG_PLAYLIST_INFO spi ON sp.id = spi.playlist_id
     LEFT JOIN SONG_INFO_TB si ON spi.song_id = si.id
     LEFT JOIN USER_MEMBER_TB um ON si.user_id = um.id
-    WHERE sp.id = ? AND si.id IS NOT NULL
+    WHERE sp.id = ?
     GROUP BY sp.id;
 `;
 
