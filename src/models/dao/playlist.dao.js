@@ -54,12 +54,23 @@ export const showUserPlaylistsDAO = async (userId) => {
 export const playlistInfoDAO = async (playlistId) => {
     try {
         const conn = await pool.getConnection();
-        const [rows] = await pool.query(playlistInfoSql, [playlistId]);
+        const [rows] = await conn.query(playlistInfoSql, [playlistId]);
         conn.release();
+
+        // 조회된 플레이리스트가 없을 경우 처리
+        if (rows.length === 0) {
+            return {
+                playlist_id: playlistId,
+                playlist_title: null,
+                thumbnail: null,
+                songs: null,
+            };
+        }
+
         return rows[0]; // 하나의 플레이리스트 결과만 반환
     } catch (error) {
         console.error(error);
-        throw new BaseError(status.PARAMETER_IS_WRONG);
+        throw new BaseError(status.PARAMETER_IS_WRONG, "Error fetching playlist info");
     }
 };
 
