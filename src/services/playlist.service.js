@@ -1,7 +1,7 @@
 // service에서 실제 구현해야 하는 로직 구현
 import { BaseError } from "../../config/error.js";
 import { status } from "../../config/response.status.js";
-import {deletePlayListDAO, insertPlaylistDAO, playlistInfoDAO,
+import {deletePlaylistDAO, insertPlaylistDAO, playlistInfoDAO,
     addSongsToPlaylistDAO, showUserPlaylistsDAO, updatePlaylistNameDAO,
     updateAndReorderSongsDAO, reorderSongsDAO, deleteAndReorderSongsDAO, getCurrentMaxOrderDAO} from "../models/dao/playlist.dao.js";
 
@@ -18,14 +18,16 @@ export const insertPlaylistService = async (requestData) => {
 };
 
 // 플레이리스트 삭제 함수
-export const deletePlaylistService = async (playlistId) =>{
-    try{
-        await deletePlayListDAO(playlistId);
+export const deletePlaylistService = async (playlistId) => {
+    try {
+        console.log("Service received playlistId:", playlistId); // 로그 추가
+        await deletePlaylistDAO(playlistId);
     } catch (error) {
-        console.error(error);
-        throw new BaseError(status.INTERNAL_SERVER_ERROR, 'Error delete playlist');
+        console.error("Error in deletePlaylistService:", error);
+        throw new BaseError(status.INTERNAL_SERVER_ERROR, "Error deleting playlist");
     }
 };
+
 
 // 유저의 모든 플레이리스트 조회 함수
 export const showUserPlaylistsService = async (userId) => {

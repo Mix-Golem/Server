@@ -24,16 +24,26 @@ export const insertPlaylistDAO = async (data) => {
 };
 
 // 플레이리스트 삭제 DAO
-export const deletePlayListDAO = async (playlistID) =>{
+export const deletePlaylistDAO = async (playlistId) => {
     try {
         const conn = await pool.getConnection();
-        await pool.query(deletePlaylistSql, [playlistID]);
-        conn.release;
-    }catch (error){
-        console.error(error);
-        throw new BaseError(status.PARAMETER_IS_WRONG);
+
+        console.log("Deleting playlist with ID:", playlistId); // 로그 추가
+
+        const [result] = await conn.query(deletePlaylistSql, [playlistId]);
+        conn.release();
+
+        console.log("Delete Result:", result); // 쿼리 결과 확인
+        if (result.affectedRows === 0) {
+            throw new Error("No rows deleted"); // 삭제된 행이 없으면 에러 발생
+        }
+    } catch (error) {
+        console.error("Error deleting playlist:", error);
+        throw new BaseError(status.PARAMETER_IS_WRONG, "Error deleting playlist");
     }
 };
+
+
 
 // 유저의 플레이리스트 전체 조회 DAO
 // 유저의 플레이리스트 전체 조회 DAO

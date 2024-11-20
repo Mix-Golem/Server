@@ -4,7 +4,7 @@ export const insertPlaylistSql = "INSERT INTO SONG_PLAYLIST_TB (USER_ID, TITLE, 
 
 // 재생목록 삭제 쿼리문
 export const deletePlaylistSql = `
-    DELETE FROM SONG_PLAYLIST_TB 
+    DELETE FROM SONG_PLAYLIST_TB
     WHERE id = ?;
 `;
 

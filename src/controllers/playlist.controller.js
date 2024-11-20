@@ -48,16 +48,23 @@ export const showUserPlaylistsController = async (req, res, next) => {
 // 플레이리스트 삭제 컨트롤러
 export const deletePlaylistController = async (req, res, next) => {
     try {
-        const playlistId = req.userId;
+        const playlistId = req.params.playlistId;
+
+        if (!playlistId) {
+            throw new Error("Playlist ID is missing from request parameters");
+        }
+
+        console.log("Playlist ID to delete:", playlistId); // 로그 추가
 
         // 서비스 함수 호출 -> 플레이리스트 삭제
         await deletePlaylistService(playlistId);
-        res.send(response(status.SUCCESS, {message: 'Playlist delete Success'}));
-    } catch (error){ // 오류 발생 : 로그 출력, 에러 응답 전송
-        console.error(error);
+        res.send(response(status.SUCCESS, { message: 'Playlist delete Success' }));
+    } catch (error) {
+        console.error("Error in deletePlaylistController:", error);
         res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
     }
 };
+
 
 // 플레이리스트 조회 Controller
 export const playlistInfoController = async (req, res, next) => {
