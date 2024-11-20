@@ -15,9 +15,11 @@ playlistRoute.post('', async (req, res) => {
 });
 
 // 플레이리스트 삭제 라우트
-playlistRoute.delete('/:id', async (req, res)=> {
-    await deletePlaylistController(req,res);
+playlistRoute.delete('/:playlistId', async (req, res) => {
+    console.log("Request Params:", req.params); // URL 파라미터 로그 추가
+    await deletePlaylistController(req, res);
 });
+
 
 // 플레이리스트 조회 라우트
 playlistRoute.get('/:id', async (req, res)=> {
