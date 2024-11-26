@@ -39,7 +39,7 @@ export const playlistInfoSql = `
         sp.id AS playlist_id, 
         sp.title AS playlist_title, 
         (
-            SELECT si.media
+            SELECT si.thumbnail
             FROM SONG_INFO_TB si
             JOIN SONG_PLAYLIST_INFO spi ON si.id = spi.song_id
             WHERE spi.playlist_id = sp.id
@@ -55,7 +55,7 @@ export const playlistInfoSql = `
                     'song_order', spi.order, 
                     'artist_id', um.id,
                     'artist_name', um.name,
-                    'thumbnail', si.media -- 각 곡의 썸네일
+                    'thumbnail', si.thumbnail -- 각 곡의 썸네일
                 )
             )
         END AS songs
