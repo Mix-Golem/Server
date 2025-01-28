@@ -13,7 +13,7 @@ export const deletePlaylistSql = `
 export const showUserPlaylistsSql = `
     SELECT 
         sp.id AS playlist_id, 
-        sp.title AS playlist_title, 
+        sp.title AS playlist_title,
         sp.created_at,
         (SELECT si.thumbnail FROM SONG_PLAYLIST_INFO spi
          LEFT JOIN SONG_INFO_TB si ON spi.song_id = si.id
