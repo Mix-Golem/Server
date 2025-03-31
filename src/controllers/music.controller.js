@@ -30,7 +30,7 @@ export const insertMusicController=async(req,res,next)=>{
 // music info 불러오는 Controller
 export const musicInfoController = async (req, res, next) => {
     try {
-      const token = req.headers.authorization?.split(' ')[1];
+      const token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.decode(token);
       const userId = decoded?.id;
       const songId = req.params.id;
