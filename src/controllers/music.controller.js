@@ -30,19 +30,23 @@ export const insertMusicController=async(req,res,next)=>{
 // music info 불러오는 Controller
 export const musicInfoController = async (req, res, next) => {
     try {
-        const token = req.headers.authorization.split(' ')[1];;
-        console.log(token);
-        const decoded = jwt.decode(token);
-        console.log(decoded);
-        const userId = decoded.req.id;
-        const songId = req.params.id;
-        const musicInfo = await musicInfoService(userId, songId);
-        res.send(response(status.SUCCESS, musicInfo));
+      const token = req.headers.authorization?.split(' ')[1];
+      const decoded = jwt.decode(token);
+      const userId = decoded?.id;
+      const songId = req.params.id;
+  
+      if (!userId) throw new BaseError(status.UNAUTHORIZED);
+  
+      const musicInfo = await musicInfoService(userId, songId);
+      res.status(status.SUCCESS.status).json(response(status.SUCCESS, musicInfo));
+  
     } catch (error) {
-        console.error(error);
-        res.send(response(status.BAD_REQUEST, BaseError(status.BAD_REQUEST)));
+      console.error(error);
+  
+      const errStatus = error instanceof BaseError ? error.status : status.BAD_REQUEST.status;
+      res.status(errStatus).json(response(status.BAD_REQUEST));
     }
-};
+  };
 
 
 // music change-info(update) Controller
