@@ -73,24 +73,22 @@ app.use((req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-	res.locals.message = err.message;
-	res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
-  
-	const statusCode = err.status || status.INTERNAL_SERVER_ERROR;
-  
 	console.error("Error Stack:", err.stack);
 	console.error("Error Data:", err.data);
-  
-	// 응답은 response()로 포맷팅하되, statusCode는 숫자로 분리
-	const responseBody = response(err.data || {
-	  code: 'COMMON000',
-	  isSuccess: false,
-	  message: 'Internal Server Error',
-	  result: null,
-	});
-  
-	res.status(statusCode).json(responseBody); // ✅ send → json도 좋음
-  });
+
+	const statusCode =
+		err.status ||
+		(err.data && err.data.status) ||
+		status.INTERNAL_SERVER_ERROR.status;
+
+	res.status(statusCode).json(response(err.data || {
+		isSuccess: false,
+		code: "COMMON000",
+		message: "서버 에러",
+		result: null
+	}));
+});
+
 
 //sample
 app.listen(app.get("port"), () => {
