@@ -75,15 +75,22 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
 	res.locals.message = err.message;
 	res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
-
-	// 상태 코드가 있으면 사용, 없으면 500으로 설정
+  
 	const statusCode = err.status || status.INTERNAL_SERVER_ERROR;
+  
 	console.error("Error Stack:", err.stack);
 	console.error("Error Data:", err.data);
-	res
-		.status(statusCode)
-		.send(response(err.data || { message: "Internal Server Error" }));
-});
+  
+	// 응답은 response()로 포맷팅하되, statusCode는 숫자로 분리
+	const responseBody = response(err.data || {
+	  code: 'COMMON000',
+	  isSuccess: false,
+	  message: 'Internal Server Error',
+	  result: null,
+	});
+  
+	res.status(statusCode).json(responseBody); // ✅ send → json도 좋음
+  });
 
 //sample
 app.listen(app.get("port"), () => {
