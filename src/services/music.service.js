@@ -33,8 +33,10 @@ export const insertMusicService = async (data) => {
 // music 조회 함수
 export const musicInfoService = async (userId, songId) => {
     try {
+        
         //곡 전체 데이터
         const musicInfo = await musicInfoDAO(songId);
+       
         const artistData = await artistInfoDAO(userId);
         const countData = await countFavoriteDAO(songId);
         const lyrics = await findLyricsDAO(songId);

@@ -23,7 +23,7 @@ export const findLyricsResponseDTO = (lyric)=>{
 }
 
 export const findMusicInfoResponseDTO = (lyrics,favorite,artistData,musicData)=>{
-
+    console.log(musicData);
     return{
         id:musicData.id,
         userId:musicData.userId,
